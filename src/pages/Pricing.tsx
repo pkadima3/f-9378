@@ -1,9 +1,6 @@
 import { useState } from "react"
 import { PlanToggle } from "@/components/pricing/PlanToggle"
 import { PlanCard } from "@/components/pricing/PlanCard"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { CreditCard, Zap } from "lucide-react"
 
 export default function Pricing() {
   const [isYearly, setIsYearly] = useState(true)
@@ -14,38 +11,6 @@ export default function Pricing() {
 
   return (
     <div className="container max-w-7xl py-12 animate-fade-up">
-      {/* Header Section */}
-      <div className="grid gap-6 md:grid-cols-2 mb-12">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CreditCard className="h-5 w-5" />
-              Payment Method
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <CardDescription className="mb-4">
-              Add a payment method to upgrade your plan
-            </CardDescription>
-            <Button variant="default">Add Payment Method</Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Zap className="h-5 w-5" />
-              Current Plan
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <CardDescription className="mb-4">Free Trial</CardDescription>
-            <Button variant="default">Upgrade Plan</Button>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Pricing Section */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold mb-4">Simple, transparent pricing</h1>
         <p className="text-muted-foreground">
@@ -55,7 +20,7 @@ export default function Pricing() {
 
       <PlanToggle isYearly={isYearly} onToggle={setIsYearly} />
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-8 md:grid-cols-3">
         <PlanCard
           title="Lite Plan"
           price={isYearly ? "€59.99/year" : "€9.99/month"}
@@ -68,7 +33,7 @@ export default function Pricing() {
             "Basic analytics"
           ]}
           savings={isYearly ? "Save €59.99/year (~50%)" : undefined}
-          buttonText={isYearly ? "Start Free Trial" : "Choose Lite"}
+          buttonText="Start Free Trial"
           note="Start your 5-day trial with 5 free requests. Cancel anytime during the trial to avoid charges."
           onSelect={() => handlePlanSelect("lite")}
         />
@@ -88,7 +53,6 @@ export default function Pricing() {
           ]}
           savings={isYearly ? "Save €159.99/year (~44%)" : undefined}
           buttonText="Choose Pro"
-          buttonVariant="default"
           onSelect={() => handlePlanSelect("pro")}
         />
 

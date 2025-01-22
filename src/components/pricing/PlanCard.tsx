@@ -26,42 +26,44 @@ export function PlanCard({
   onSelect
 }: PlanCardProps) {
   return (
-    <Card className="flex flex-col">
-      <CardHeader>
-        <CardTitle className="text-xl">{title}</CardTitle>
-        <CardDescription className="min-h-[60px]">{description}</CardDescription>
+    <Card className="flex flex-col h-full">
+      <CardHeader className="flex-none">
+        <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+        <CardDescription className="text-sm text-muted-foreground">{description}</CardDescription>
       </CardHeader>
-      <CardContent className="flex-grow">
-        <div className="mb-4">
+      <CardContent className="flex-grow space-y-4">
+        <div>
           <span className="text-4xl font-bold">{price}</span>
         </div>
         {savings && (
-          <p className="text-sm text-green-600 dark:text-green-400 mb-4">
+          <p className="text-sm text-green-600 dark:text-green-400">
             {savings}
           </p>
         )}
-        <ul className="space-y-2">
+        <ul className="space-y-2.5">
           {features.map((feature, i) => (
-            <li key={i} className="flex items-center gap-2">
-              <Check className="h-4 w-4 text-primary" />
-              <span className="text-sm">{feature}</span>
+            <li key={i} className="flex items-center gap-2 text-sm">
+              <Check className="h-4 w-4 text-primary flex-shrink-0" />
+              <span>{feature}</span>
             </li>
           ))}
         </ul>
       </CardContent>
-      <CardFooter className="flex flex-col mt-auto">
-        <Button
-          variant={buttonVariant}
-          className="w-full"
-          onClick={onSelect}
-        >
-          {buttonText}
-        </Button>
-        {note && (
-          <p className="text-xs text-muted-foreground mt-4 text-center">
-            {note}
-          </p>
-        )}
+      <CardFooter className="flex-none">
+        <div className="w-full space-y-4">
+          <Button
+            variant={buttonVariant}
+            className="w-full"
+            onClick={onSelect}
+          >
+            {buttonText}
+          </Button>
+          {note && (
+            <p className="text-xs text-muted-foreground text-center">
+              {note}
+            </p>
+          )}
+        </div>
       </CardFooter>
     </Card>
   )
