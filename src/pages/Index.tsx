@@ -4,6 +4,7 @@ import { FeaturesGrid } from '@/components/home/FeaturesGrid';
 import { HowItWorks } from '@/components/home/HowItWorks';
 import { SocialProof } from '@/components/home/SocialProof';
 import { PricingPreview } from '@/components/home/PricingPreview';
+import { FinalCTA } from '@/components/home/FinalCTA';
 
 const Index = () => {
   return (
@@ -14,6 +15,7 @@ const Index = () => {
         <HowItWorks />
         <PricingPreview />
         <SocialProof />
+        <FinalCTA />
       </div>
     </div>
   );
