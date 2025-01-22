@@ -59,6 +59,9 @@ const Navbar = () => {
           <Link to="/features" className="text-sm font-medium transition-colors hover:text-primary">
             Features
           </Link>
+          <Link to="/caption-generator" className="text-sm font-medium transition-colors hover:text-primary">
+            Caption Generator
+          </Link>
           <Link to="/blog" className="text-sm font-medium transition-colors hover:text-primary">
             Blog
           </Link>

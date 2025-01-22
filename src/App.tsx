@@ -14,6 +14,7 @@ function App() {
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/caption-generator" element={<CaptionGenerator />} />
           </Routes>
         </div>
       </div>
