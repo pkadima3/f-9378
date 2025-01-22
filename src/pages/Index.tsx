@@ -59,11 +59,31 @@ const testimonials = [
 ];
 
 const companyLogos = [
-  { name: "TechCorp", logo: "/placeholder.svg" },
-  { name: "InnovateLabs", logo: "/placeholder.svg" },
-  { name: "FutureMedia", logo: "/placeholder.svg" },
-  { name: "CreativeStudio", logo: "/placeholder.svg" },
-  { name: "DigitalFirst", logo: "/placeholder.svg" }
+  { 
+    name: "GA-M2M", 
+    logo: "/lovable-uploads/3aba6ead-1832-42e8-ab9b-82cb0c536bc2.png",
+    className: "h-12 object-contain"
+  },
+  { 
+    name: "Insighter", 
+    logo: "/lovable-uploads/175855a8-22d0-4c0a-a922-ce00d62d0cf9.png",
+    className: "h-8 object-contain brightness-0 dark:brightness-200"
+  },
+  { 
+    name: "NodeMatics", 
+    logo: "/lovable-uploads/deca3cd4-fcdc-4ab4-ba33-bd6c86f5e181.png",
+    className: "h-10 object-contain"
+  },
+  { 
+    name: "Merci", 
+    logo: "/lovable-uploads/fb78ae45-9400-4f34-a432-4b87d39c34b3.png",
+    className: "h-8 object-contain"
+  },
+  { 
+    name: "Biscuiteers", 
+    logo: "/lovable-uploads/5a9e1c75-ae8e-4a61-a1a2-5430ddd5ff97.png",
+    className: "h-12 object-contain brightness-0 dark:brightness-200"
+  }
 ];
 
 const Index = () => {
@@ -166,16 +186,16 @@ const Index = () => {
             </h2>
 
             {/* Company Logos */}
-            <div className="flex flex-wrap justify-center gap-8 mb-20">
+            <div className="flex flex-wrap justify-center items-center gap-8 mb-20">
               {companyLogos.map((company, index) => (
                 <div 
                   key={index}
-                  className="w-32 h-12 bg-white dark:bg-gray-800 rounded-lg shadow-sm flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300"
+                  className="w-40 h-20 bg-white dark:bg-gray-800 rounded-lg shadow-sm flex items-center justify-center p-4 hover:shadow-md transition-all duration-300"
                 >
                   <img 
                     src={company.logo} 
                     alt={company.name} 
-                    className="max-h-8 object-contain"
+                    className={company.className}
                   />
                 </div>
               ))}
