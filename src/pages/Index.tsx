@@ -3,6 +3,7 @@ import { HeroSection } from '@/components/home/HeroSection';
 import { FeaturesGrid } from '@/components/home/FeaturesGrid';
 import { HowItWorks } from '@/components/home/HowItWorks';
 import { SocialProof } from '@/components/home/SocialProof';
+import { PricingPreview } from '@/components/home/PricingPreview';
 
 const Index = () => {
   return (
@@ -11,6 +12,7 @@ const Index = () => {
         <HeroSection />
         <FeaturesGrid />
         <HowItWorks />
+        <PricingPreview />
         <SocialProof />
       </div>
     </div>
