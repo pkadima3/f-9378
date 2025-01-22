@@ -3,19 +3,19 @@ import { Card } from '@/components/ui/card';
 
 const testimonials = [
   {
-    avatar: "/lovable-uploads/175855a8-22d0-4c0a-a922-ce00d62d0cf9.png",
+    avatar: "/lovable-uploads/",
     quote: "EngagePerfect's AI suggestions helped us increase engagement by 3x while cutting content creation time in half.",
     name: "Sarah Chen",
     role: "Digital Marketing Lead"
   },
   {
-    avatar: "/lovable-uploads/416dbec0-a453-405d-9d5d-b4f9a4c84bbf.png",
+    avatar: "/lovable-uploads/",
     quote: "The analytics dashboard gives us insights we never had before. Our content strategy is now data-driven and much more effective.",
     name: "Marcus Rodriguez",
     role: "Content Creator"
   },
   {
-    avatar: "/lovable-uploads/59be58ba-79a6-4620-a359-319fb8d3f7e9.png",
+    avatar: "/lovable-uploads/",
     quote: "The multi-platform support is a game-changer. What used to take hours now takes minutes.",
     name: "Alex Thompson",
     role: "Social Media Manager"
