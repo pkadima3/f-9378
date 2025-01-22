@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Check } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
-const PricingPreview = () => {
+export const PricingPreview = () => {
   const navigate = useNavigate();
 
   const plans = [
@@ -87,5 +87,3 @@ const PricingPreview = () => {
     </section>
   );
 };
-
-export default PricingPreview;
