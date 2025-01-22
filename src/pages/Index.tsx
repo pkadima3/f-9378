@@ -65,24 +65,14 @@ const companyLogos = [
     className: "h-12 object-contain"
   },
   { 
-    name: "Insighter", 
-    logo: "/lovable-uploads/175855a8-22d0-4c0a-a922-ce00d62d0cf9.png",
-    className: "h-8 object-contain brightness-0 dark:brightness-200"
-  },
-  { 
-    name: "NodeMatics", 
-    logo: "/lovable-uploads/deca3cd4-fcdc-4ab4-ba33-bd6c86f5e181.png",
-    className: "h-10 object-contain"
+    name: "LollaBakes", 
+    logo: "/lovable-uploads/8c6fdbcf-5b45-4299-8263-f652c13d1da4.png",
+    className: "h-12 object-contain"
   },
   { 
     name: "Merci", 
     logo: "/lovable-uploads/fb78ae45-9400-4f34-a432-4b87d39c34b3.png",
     className: "h-8 object-contain"
-  },
-  { 
-    name: "Biscuiteers", 
-    logo: "/lovable-uploads/5a9e1c75-ae8e-4a61-a1a2-5430ddd5ff97.png",
-    className: "h-12 object-contain brightness-0 dark:brightness-200"
   }
 ];
 
