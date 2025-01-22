@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ChartBarIcon, PlayCircle } from 'lucide-react';
 import { Globe, Bot, LayoutTemplate, BarChart3, HeadsetIcon, Calendar } from 'lucide-react';
+import { Card } from '@/components/ui/card';
 
 const features = [
   {
@@ -34,6 +35,35 @@ const features = [
     title: "Post Scheduling",
     description: "Plan your week and set it on autopilot with smart scheduling"
   }
+];
+
+const testimonials = [
+  {
+    avatar: "/placeholder.svg",
+    quote: "EngagePerfect's AI suggestions helped us increase engagement by 3x while cutting content creation time in half.",
+    name: "Sarah Chen",
+    role: "Digital Marketing Lead"
+  },
+  {
+    avatar: "/placeholder.svg",
+    quote: "The analytics dashboard gives us insights we never had before. Our content strategy is now data-driven and much more effective.",
+    name: "Marcus Rodriguez",
+    role: "Content Creator"
+  },
+  {
+    avatar: "/placeholder.svg",
+    quote: "The multi-platform support is a game-changer. What used to take hours now takes minutes.",
+    name: "Alex Thompson",
+    role: "Social Media Manager"
+  }
+];
+
+const companyLogos = [
+  { name: "TechCorp", logo: "/placeholder.svg" },
+  { name: "InnovateLabs", logo: "/placeholder.svg" },
+  { name: "FutureMedia", logo: "/placeholder.svg" },
+  { name: "CreativeStudio", logo: "/placeholder.svg" },
+  { name: "DigitalFirst", logo: "/placeholder.svg" }
 ];
 
 const Index = () => {
@@ -69,16 +99,12 @@ const Index = () => {
             {/* Right Column - Dashboard Mockup */}
             <div className="relative animate-fade-up" style={{ animationDelay: '0.3s' }}>
               <div className="relative">
-                {/* Glass morphism effect for the dashboard container */}
                 <div className="absolute inset-0 bg-white/30 dark:bg-gray-800/30 backdrop-blur-xl rounded-2xl shadow-2xl transform rotate-2"></div>
                 
-                {/* Dashboard mockup */}
                 <div className="relative bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl">
                   <div className="space-y-4">
-                    {/* Mock Analytics Graph */}
                     <div className="h-48 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/50 dark:to-blue-900/50 rounded-lg animate-pulse"></div>
                     
-                    {/* Mock Metrics */}
                     <div className="grid grid-cols-3 gap-4">
                       {[...Array(3)].map((_, i) => (
                         <div key={i} className="bg-gray-100 dark:bg-gray-700/50 p-4 rounded-lg">
@@ -91,7 +117,6 @@ const Index = () => {
                 </div>
               </div>
               
-              {/* Decorative elements */}
               <div className="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                 <div className="w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"></div>
               </div>
@@ -129,6 +154,63 @@ const Index = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Social Proof Section */}
+        <div className="py-24 animate-fade-up" style={{ animationDelay: '0.5s' }}>
+          {/* Intro Tagline */}
+          <div className="text-center mb-16">
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-16">
+              Trusted by content creators, businesses, and marketers worldwide
+            </h2>
+
+            {/* Company Logos */}
+            <div className="flex flex-wrap justify-center gap-8 mb-20">
+              {companyLogos.map((company, index) => (
+                <div 
+                  key={index}
+                  className="w-32 h-12 bg-white dark:bg-gray-800 rounded-lg shadow-sm flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300"
+                >
+                  <img 
+                    src={company.logo} 
+                    alt={company.name} 
+                    className="max-h-8 object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Testimonials */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {testimonials.map((testimonial, index) => (
+                <Card 
+                  key={index}
+                  className="p-6 bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow duration-300"
+                >
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div className="w-16 h-16 rounded-full overflow-hidden">
+                      <img 
+                        src={testimonial.avatar} 
+                        alt={testimonial.name} 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <p className="text-gray-600 dark:text-gray-300 italic">
+                      "{testimonial.quote}"
+                    </p>
+                    <div>
+                      <p className="font-semibold text-gray-900 dark:text-white">
+                        {testimonial.name}
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        {testimonial.role}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
       </div>
