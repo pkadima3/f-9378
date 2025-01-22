@@ -62,17 +62,27 @@ const companyLogos = [
   { 
     name: "GA-M2M", 
     logo: "/lovable-uploads/3aba6ead-1832-42e8-ab9b-82cb0c536bc2.png",
-    className: "h-12 object-contain"
+    className: "h-16 object-contain" // Increased height
   },
   { 
     name: "LollaBakes", 
     logo: "/lovable-uploads/8c6fdbcf-5b45-4299-8263-f652c13d1da4.png",
-    className: "h-12 object-contain"
+    className: "h-16 object-contain" // Increased height
+  },
+  { 
+    name: "Insighter", 
+    logo: "/lovable-uploads/e67ab41a-0247-4bf9-b72a-993aac78208b.png",
+    className: "h-12 object-contain brightness-0 dark:brightness-200" // Added dark mode support
+  },
+  { 
+    name: "NodeMatics", 
+    logo: "/lovable-uploads/cb61cf47-3944-44e5-9e26-5f01266a4a65.png",
+    className: "h-14 object-contain"
   },
   { 
     name: "Merci", 
     logo: "/lovable-uploads/fb78ae45-9400-4f34-a432-4b87d39c34b3.png",
-    className: "h-8 object-contain"
+    className: "h-10 object-contain"
   }
 ];
 
@@ -176,11 +186,11 @@ const Index = () => {
             </h2>
 
             {/* Company Logos */}
-            <div className="flex flex-wrap justify-center items-center gap-8 mb-20">
+            <div className="flex flex-wrap justify-center items-center gap-12 mb-20">
               {companyLogos.map((company, index) => (
                 <div 
                   key={index}
-                  className="w-40 h-20 bg-white dark:bg-gray-800 rounded-lg shadow-sm flex items-center justify-center p-4 hover:shadow-md transition-all duration-300"
+                  className="w-48 h-24 bg-white dark:bg-gray-800 rounded-lg shadow-sm flex items-center justify-center p-6 hover:shadow-md transition-all duration-300"
                 >
                   <img 
                     src={company.logo} 
