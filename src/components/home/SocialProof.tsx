@@ -8,12 +8,7 @@ const testimonials = [
     name: "Sarah Chen",
     role: "Digital Marketing Lead"
   },
-  {
-    avatar: "/lovable-uploads/1626760331644.jpg",
-    quote: "EngagePerfect's AI suggestions helped us increase engagement by 3x while cutting content creation time in half.",
-    name: "Sarah Chen",
-    role: "Digital Marketing Lead"
-  },
+
   {
     avatar: "/lovable-uploads/1681741203273.jpg",
     quote: "The analytics dashboard gives us insights we never had before. Our content strategy is now data-driven and much more effective.",
