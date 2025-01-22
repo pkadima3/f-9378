@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ChartBarIcon, PlayCircle } from 'lucide-react';
-import { Globe, Robot, LayoutTemplate, BarChart3, HeadsetIcon, Calendar } from 'lucide-react';
+import { Globe, Bot, LayoutTemplate, BarChart3, HeadsetIcon, Calendar } from 'lucide-react';
 
 const features = [
   {
@@ -10,7 +10,7 @@ const features = [
     description: "Reach all major networks in one place, saving hours of cross-posting time"
   },
   {
-    icon: Robot,
+    icon: Bot,
     title: "AI Content Generation",
     description: "Create on-brand copy for every platform with our advanced AI assistant"
   },
