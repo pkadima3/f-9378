@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -7,8 +7,15 @@ import { Input } from "@/components/ui/input";
 import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 
 const Auth = () => {
+  const location = useLocation();
   const navigate = useNavigate();
-  const [isSignUp, setIsSignUp] = useState(false);
+  
+  // Check if the URL has ?mode=signup to determine initial state
+  const [isSignUp, setIsSignUp] = useState(() => {
+    const searchParams = new URLSearchParams(location.search);
+    return searchParams.get('mode') === 'signup';
+  });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -82,6 +89,13 @@ const Auth = () => {
         setErrorMessage(error.message);
       }
     }
+  };
+
+  // Function to handle switching between sign-in and sign-up modes
+  const handleModeSwitch = (mode: boolean) => {
+    const newMode = mode ? 'signup' : 'signin';
+    navigate(`/auth?mode=${newMode}`, { replace: true });
+    setIsSignUp(mode);
   };
 
   return (
@@ -237,7 +251,7 @@ const Auth = () => {
                 Already have an account?{" "}
                 <button
                   type="button"
-                  onClick={() => setIsSignUp(false)}
+                  onClick={() => handleModeSwitch(false)}
                   className="text-[#4461F2] hover:underline"
                 >
                   Sign in
@@ -248,7 +262,7 @@ const Auth = () => {
                 Don't have an account?{" "}
                 <button
                   type="button"
-                  onClick={() => setIsSignUp(true)}
+                  onClick={() => handleModeSwitch(true)}
                   className="text-[#4461F2] hover:underline"
                 >
                   Sign up

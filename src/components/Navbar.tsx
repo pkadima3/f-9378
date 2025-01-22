@@ -110,10 +110,10 @@ const Navbar = () => {
           ) : (
             <>
               <Button variant="outline" asChild>
-                <Link to="/auth">Login</Link>
+              <Link to="/auth?mode=signin">Login</Link>
               </Button>
               <Button asChild>
-                <Link to="/auth">Sign up</Link>
+              <Link to="/auth?mode=signup">Sign up</Link>
               </Button>
             </>
           )}
