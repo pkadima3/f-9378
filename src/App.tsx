@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import Index from "./pages/Index"
 import Auth from "./pages/Auth"
 import Pricing from "./pages/Pricing"
+import CaptionGenerator from "./pages/CaptionGenerator"
 import TopBar from "./components/TopBar"
 
 function App() {
