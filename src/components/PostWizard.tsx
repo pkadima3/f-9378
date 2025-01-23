@@ -12,6 +12,7 @@ import { CaptionEditor } from './CaptionEditor';
 import { PostSteps } from './post/PostSteps';
 import { CaptionSettings } from './post/CaptionSettings';
 import { PostPreview } from './preview/PostPreview';
+import { useNavigate } from 'react-router-dom';
 
 export type Platform = 'Instagram' | 'LinkedIn' | 'Facebook' | 'Twitter' | 'TikTok';
 type Goal = 'Sales' | 'Drive Engagement' | 'Grow Followers' | 'Share Knowledge' | 'Brand Awareness';
@@ -22,6 +23,7 @@ interface PostWizardProps {
 }
 
 export const PostWizard = ({ onComplete }: PostWizardProps) => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [platform, setPlatform] = useState<Platform>();
   const [niche, setNiche] = useState('');
@@ -151,7 +153,13 @@ export const PostWizard = ({ onComplete }: PostWizardProps) => {
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       
       if (userError || !user) {
-        throw new Error('User not authenticated');
+        toast({
+          title: "Authentication required",
+          description: "Please sign in to upload media.",
+          variant: "destructive",
+        });
+        navigate('/auth');
+        return;
       }
 
       const { finalBlob, metadata } = await processMediaFile(
@@ -164,7 +172,7 @@ export const PostWizard = ({ onComplete }: PostWizardProps) => {
       setImageMetadata(metadata);
 
       const fileExt = metadata.originalName.split('.').pop();
-      const filePath = `${crypto.randomUUID()}.${fileExt}`;
+      const filePath = `${user.id}/${crypto.randomUUID()}.${fileExt}`;
 
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('media')
