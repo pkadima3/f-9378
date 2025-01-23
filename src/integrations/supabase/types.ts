@@ -59,30 +59,77 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
+          current_plan_id: string | null
           email: string | null
           full_name: string | null
           id: string
           requests_remaining: number | null
           stripe_customer_id: string | null
           subscription_status: string | null
+          total_requests_made: number | null
         }
         Insert: {
           created_at?: string
+          current_plan_id?: string | null
           email?: string | null
           full_name?: string | null
           id: string
           requests_remaining?: number | null
           stripe_customer_id?: string | null
           subscription_status?: string | null
+          total_requests_made?: number | null
         }
         Update: {
           created_at?: string
+          current_plan_id?: string | null
           email?: string | null
           full_name?: string | null
           id?: string
           requests_remaining?: number | null
           stripe_customer_id?: string | null
           subscription_status?: string | null
+          total_requests_made?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_current_plan_id_fkey"
+            columns: ["current_plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscription_plans: {
+        Row: {
+          created_at: string
+          currency: string
+          features: Json | null
+          id: string
+          name: string
+          price: number
+          request_limit: number
+          stripe_price_id: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          features?: Json | null
+          id?: string
+          name: string
+          price: number
+          request_limit: number
+          stripe_price_id: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          features?: Json | null
+          id?: string
+          name?: string
+          price?: number
+          request_limit?: number
+          stripe_price_id?: string
         }
         Relationships: []
       }
@@ -129,6 +176,48 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      usage_logs: {
+        Row: {
+          id: string
+          request_type: string
+          status: string
+          subscription_id: string | null
+          timestamp: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          request_type: string
+          status: string
+          subscription_id?: string | null
+          timestamp?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          request_type?: string
+          status?: string
+          subscription_id?: string | null
+          timestamp?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "usage_logs_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "usage_logs_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
