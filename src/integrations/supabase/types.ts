@@ -86,6 +86,56 @@ export type Database = {
         }
         Relationships: []
       }
+      subscriptions: {
+        Row: {
+          billing_cycle_end_date: string | null
+          created_at: string
+          id: string
+          next_billing_date: string | null
+          plan_name: string
+          start_date: string | null
+          status: string
+          stripe_subscription_id: string
+          trial_end_date: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          billing_cycle_end_date?: string | null
+          created_at?: string
+          id?: string
+          next_billing_date?: string | null
+          plan_name: string
+          start_date?: string | null
+          status: string
+          stripe_subscription_id: string
+          trial_end_date?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          billing_cycle_end_date?: string | null
+          created_at?: string
+          id?: string
+          next_billing_date?: string | null
+          plan_name?: string
+          start_date?: string | null
+          status?: string
+          stripe_subscription_id?: string
+          trial_end_date?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
