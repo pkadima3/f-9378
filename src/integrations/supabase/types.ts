@@ -67,6 +67,10 @@ export type Database = {
           stripe_customer_id: string | null
           subscription_status: string | null
           total_requests_made: number | null
+          trial_active: boolean | null
+          trial_end_date: string | null
+          trial_requests_remaining: number | null
+          trial_start_date: string | null
         }
         Insert: {
           created_at?: string
@@ -78,6 +82,10 @@ export type Database = {
           stripe_customer_id?: string | null
           subscription_status?: string | null
           total_requests_made?: number | null
+          trial_active?: boolean | null
+          trial_end_date?: string | null
+          trial_requests_remaining?: number | null
+          trial_start_date?: string | null
         }
         Update: {
           created_at?: string
@@ -89,6 +97,10 @@ export type Database = {
           stripe_customer_id?: string | null
           subscription_status?: string | null
           total_requests_made?: number | null
+          trial_active?: boolean | null
+          trial_end_date?: string | null
+          trial_requests_remaining?: number | null
+          trial_start_date?: string | null
         }
         Relationships: [
           {
