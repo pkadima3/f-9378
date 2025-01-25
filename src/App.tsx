@@ -8,9 +8,9 @@ import TopBar from "./components/TopBar"
 function App() {
   return (
     <Router>
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-background">
         <TopBar />
-        <div className="flex-1 pt-16">
+        <div className="flex-1">
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
