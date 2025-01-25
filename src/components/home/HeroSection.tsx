@@ -4,7 +4,7 @@ import { ChartBarIcon, PlayCircle } from 'lucide-react';
 
 export const HeroSection = () => {
   return (
-    <div className="pt-20 lg:pt-32">
+    <div className="w-full pt-16 lg:pt-24 pb-12">
       <div className="grid lg:grid-cols-2 gap-12 items-center">
         <div className="space-y-8 text-center lg:text-left">
           <h1 className="text-4xl lg:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600 animate-fade-up">
