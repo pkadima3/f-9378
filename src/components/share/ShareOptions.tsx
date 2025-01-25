@@ -235,14 +235,12 @@ export const ShareOptions = ({ imageUrl, caption, platform, fileType }: ShareOpt
         return <Linkedin />;
       case 'Facebook':
         return <Facebook />;
-      case 'TikTok':
-        return <Music2 />;
       default:
         return <Share2 />;
     }
   };
 
-  const platforms: Platform[] = ['Instagram', 'Twitter', 'LinkedIn', 'Facebook', 'TikTok'];
+  const platforms: Platform[] = ['Instagram', 'Twitter', 'LinkedIn', 'Facebook'];
 
   return (
     <div className="space-y-4">
