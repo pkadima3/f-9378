@@ -5,6 +5,7 @@ import { UploadProgress } from '../../upload/UploadProgress';
 import { useWizard } from '../WizardContext';
 import { usePost } from '../../post/PostContext';
 import { Crop } from 'react-image-crop';
+import { toast } from '@/components/ui/use-toast';
 
 interface UploadStepProps {
   isUploading: boolean;
@@ -27,10 +28,38 @@ export const UploadStep: React.FC<UploadStepProps> = ({
     setFile(null);
     setPreview('');
     setFileType('');
+    setRotation(0);
+    setCrop(undefined);
   };
 
   const handleRotate = () => {
     setRotation((prev) => (prev + 90) % 360);
+  };
+
+  const handleDrop = (files: File[]) => {
+    if (files.length > 0) {
+      const selectedFile = files[0];
+      
+      if (!selectedFile.type.startsWith('image/') && !selectedFile.type.startsWith('video/')) {
+        toast({
+          title: "Invalid file type",
+          description: "Please upload an image or video file",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+          setPreview(reader.result);
+          setFileType(selectedFile.type);
+          setFile(selectedFile);
+          onUpload(selectedFile);
+        }
+      };
+      reader.readAsDataURL(selectedFile);
+    }
   };
 
   return (
@@ -43,11 +72,12 @@ export const UploadStep: React.FC<UploadStepProps> = ({
       </div>
 
       {!preview ? (
-        <MediaDropzone onDrop={(files) => {
-          if (files[0]) {
-            onUpload(files[0]);
-          }
-        }} onCameraStart={() => {}} />
+        <MediaDropzone 
+          onDrop={handleDrop} 
+          onCameraStart={() => {
+            // Handle camera start if needed
+          }} 
+        />
       ) : (
         <>
           <MediaPreview
