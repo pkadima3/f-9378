@@ -219,10 +219,22 @@ export const PostWizard = ({ onComplete }: PostWizardProps) => {
   };
 
   const handleComplete = async () => {
-    if (!postId || !selectedCaption) return;
+    if (!postId || !selectedCaption) {
+      console.log('Missing required fields:', { postId, selectedCaption });
+      return;
+    }
     
     try {
-      const { error } = await supabase
+      console.log('Updating post with:', {
+        postId,
+        platform,
+        niche,
+        goal,
+        tone,
+        selectedCaption
+      });
+
+      const { data, error } = await supabase
         .from('posts')
         .update({
           platform,
@@ -231,9 +243,16 @@ export const PostWizard = ({ onComplete }: PostWizardProps) => {
           tone,
           selected_caption: selectedCaption
         })
-        .eq('id', postId);
+        .eq('id', postId)
+        .select()
+        .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+
+      console.log('Updated post:', data);
 
       toast({
         title: "Post Created",
@@ -242,6 +261,7 @@ export const PostWizard = ({ onComplete }: PostWizardProps) => {
       
       onComplete();
     } catch (error) {
+      console.error('Error in handleComplete:', error);
       toast({
         title: "Error saving post",
         description: error instanceof Error ? error.message : "Failed to save post settings",
