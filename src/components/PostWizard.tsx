@@ -1,8 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Card } from './ui/card';
 import { PostSteps } from './post/PostSteps';
 import { PostPreview } from './preview/PostPreview';
-import { PostProvider, usePost } from './post/PostContext';
+import { useWizard } from './wizard/WizardContext';
 import { PostUploader } from './post/PostUploader';
 import { PostManager } from './post/PostManager';
 import { UploadStep } from './wizard/steps/UploadStep';
@@ -18,7 +18,7 @@ interface PostWizardProps {
   onComplete: () => void;
 }
 
-const WizardContent = ({ onComplete }: PostWizardProps) => {
+export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
   const {
     step,
     setStep,
@@ -30,10 +30,10 @@ const WizardContent = ({ onComplete }: PostWizardProps) => {
     fileType,
     selectedCaption,
     overlayEnabled,
-  } = usePost();
+  } = useWizard();
 
   const imageRef = useRef<HTMLImageElement>(null);
-  const [isGeneratingCaptions, setIsGeneratingCaptions] = useState(false);
+  const [isGeneratingCaptions, setIsGeneratingCaptions] = React.useState(false);
   const { uploadMedia, isUploading, uploadProgress } = PostUploader({ imageRef });
   const { generateCaptions, handleComplete } = PostManager({ onComplete });
 
@@ -46,7 +46,7 @@ const WizardContent = ({ onComplete }: PostWizardProps) => {
       await uploadMedia();
     } else if (step === 5) {
       setIsGeneratingCaptions(true);
-      await generateCaptions({ /* add image metadata here */ });
+      await generateCaptions();
       setIsGeneratingCaptions(false);
       setStep(6);
     } else {
@@ -122,14 +122,6 @@ const WizardContent = ({ onComplete }: PostWizardProps) => {
         />
       </div>
     </div>
-  );
-};
-
-export const PostWizard: React.FC<PostWizardProps> = (props) => {
-  return (
-    <PostProvider>
-      <WizardContent {...props} />
-    </PostProvider>
   );
 };
 
