@@ -46,7 +46,15 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
       await uploadMedia();
     } else if (step === 5) {
       setIsGeneratingCaptions(true);
-      await generateCaptions();
+      // Pass the image metadata object with the required information
+      await generateCaptions({
+        imageUrl: preview,
+        fileType: fileType,
+        platform,
+        niche,
+        goal,
+        tone
+      });
       setIsGeneratingCaptions(false);
       setStep(6);
     } else {
