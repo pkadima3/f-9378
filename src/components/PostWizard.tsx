@@ -219,19 +219,44 @@ export const PostWizard = ({ onComplete }: PostWizardProps) => {
   };
 
   const handleComplete = async () => {
-    if (!postId || !selectedCaption) {
-      console.log('Missing required fields:', { postId, selectedCaption });
-      return;
-    }
-    
     try {
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      
+      if (userError || !user) {
+        toast({
+          title: "Authentication required",
+          description: "Please sign in to save your post.",
+          variant: "destructive",
+        });
+        navigate('/auth');
+        return;
+      }
+
+      if (!postId || !selectedCaption || !platform || !niche || !goal || !tone) {
+        console.log('Missing required fields:', { 
+          postId, 
+          selectedCaption, 
+          platform, 
+          niche, 
+          goal, 
+          tone 
+        });
+        toast({
+          title: "Missing information",
+          description: "Please fill in all required fields before saving.",
+          variant: "destructive",
+        });
+        return;
+      }
+    
       console.log('Updating post with:', {
         postId,
         platform,
         niche,
         goal,
         tone,
-        selectedCaption
+        selectedCaption,
+        userId: user.id
       });
 
       const { data, error } = await supabase
@@ -241,7 +266,8 @@ export const PostWizard = ({ onComplete }: PostWizardProps) => {
           niche,
           goal,
           tone,
-          selected_caption: selectedCaption
+          selected_caption: selectedCaption,
+          user_id: user.id // Ensure user_id is set
         })
         .eq('id', postId)
         .select()
