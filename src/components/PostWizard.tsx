@@ -3,6 +3,7 @@ import { Card } from './ui/card';
 import { PostSteps } from './post/PostSteps';
 import { PostPreview } from './preview/PostPreview';
 import { useWizard } from './wizard/WizardContext';
+import { usePost } from './post/PostContext';
 import { PostUploader } from './post/PostUploader';
 import { PostManager } from './post/PostManager';
 import { UploadStep } from './wizard/steps/UploadStep';
@@ -11,6 +12,7 @@ import { NicheStep } from './wizard/steps/NicheStep';
 import { GoalStep } from './wizard/steps/GoalStep';
 import { ToneStep } from './wizard/steps/ToneStep';
 import { CaptionsStep } from './wizard/steps/CaptionsStep';
+import { toast } from './ui/use-toast';
 
 export type Platform = 'Instagram' | 'LinkedIn' | 'Facebook' | 'Twitter';
 
@@ -32,6 +34,13 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
     overlayEnabled,
   } = useWizard();
 
+  const {
+    file,
+    setFile,
+    setPreview,
+    setFileType
+  } = usePost();
+
   const imageRef = useRef<HTMLImageElement>(null);
   const [isGeneratingCaptions, setIsGeneratingCaptions] = React.useState(false);
   const { uploadMedia, isUploading, uploadProgress } = PostUploader({ imageRef });
@@ -42,11 +51,19 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
   };
 
   const handleNext = async () => {
-    if (step === 1 && preview) {
+    if (step === 1) {
+      if (!file || !preview) {
+        toast({
+          title: "No media selected",
+          description: "Please upload an image or video first.",
+          variant: "destructive",
+        });
+        return;
+      }
       await uploadMedia();
+      setStep(2);
     } else if (step === 5) {
       setIsGeneratingCaptions(true);
-      // Pass the image metadata object with the required information
       await generateCaptions({
         imageUrl: preview,
         fileType: fileType,
@@ -88,7 +105,15 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
           <UploadStep
             isUploading={isUploading}
             uploadProgress={uploadProgress}
-            onUpload={uploadMedia}
+            onUpload={(file) => {
+              setFile(file);
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                setPreview(reader.result as string);
+                setFileType(file.type);
+              };
+              reader.readAsDataURL(file);
+            }}
           />
         );
       case 2:

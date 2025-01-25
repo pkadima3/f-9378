@@ -1,14 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { MediaDropzone } from '../../upload/MediaDropzone';
 import { MediaPreview } from '../../upload/MediaPreview';
 import { UploadProgress } from '../../upload/UploadProgress';
 import { useWizard } from '../WizardContext';
-import { Crop } from 'react-image-crop';
+import { usePost } from '../../post/PostContext';
 
 interface UploadStepProps {
   isUploading: boolean;
   uploadProgress: number;
-  onUpload: () => Promise<void>;
+  onUpload: (file: File) => void;
 }
 
 export const UploadStep: React.FC<UploadStepProps> = ({ 
@@ -16,44 +16,13 @@ export const UploadStep: React.FC<UploadStepProps> = ({
   uploadProgress,
   onUpload 
 }) => {
-  const { 
-    file, 
-    setFile, 
-    preview, 
-    setPreview,
-    fileType,
-    setFileType
-  } = useWizard();
+  const { preview, fileType } = useWizard();
+  const { file, setFile, setPreview, setFileType } = usePost();
   
-  const imageRef = useRef<HTMLImageElement>(null);
-  const [crop, setCrop] = useState<Crop>();
-  const [rotation, setRotation] = useState(0);
-
-  const onDrop = (acceptedFiles: File[]) => {
-    const file = acceptedFiles[0];
-    if (file) {
-      setFile(file);
-      setFileType(file.type);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleRotate = () => {
-    setRotation((prev) => (prev + 90) % 360);
-  };
-
-  const startCamera = async () => {
-    try {
-      await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'environment' }
-      });
-    } catch (error) {
-      console.error('Camera access error:', error);
-    }
+  const handleClear = () => {
+    setFile(null);
+    setPreview('');
+    setFileType('');
   };
 
   return (
@@ -66,22 +35,17 @@ export const UploadStep: React.FC<UploadStepProps> = ({
       </div>
 
       {!preview ? (
-        <MediaDropzone onDrop={onDrop} onCameraStart={startCamera} />
+        <MediaDropzone onDrop={(files) => {
+          if (files[0]) {
+            onUpload(files[0]);
+          }
+        }} onCameraStart={() => {}} />
       ) : (
         <>
           <MediaPreview
             preview={preview}
-            onClear={() => {
-              setPreview('');
-              setFile(null);
-              setFileType('');
-            }}
-            imageRef={imageRef}
+            onClear={handleClear}
             fileType={fileType}
-            crop={crop}
-            onCropChange={setCrop}
-            rotation={rotation}
-            onRotate={handleRotate}
           />
           {isUploading && (
             <UploadProgress progress={uploadProgress} isUploading={isUploading} />
