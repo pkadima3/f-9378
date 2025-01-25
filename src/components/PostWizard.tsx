@@ -48,7 +48,7 @@ const WizardContent = ({ onComplete }: PostWizardProps) => {
   const imageRef = React.useRef<HTMLImageElement>(null);
 
   const handleBack = () => {
-    setStep(prev => Math.max(1, prev - 1));
+    setStep(Math.max(1, step - 1));
   };
 
   const generateCaptions = async () => {
@@ -174,9 +174,9 @@ const WizardContent = ({ onComplete }: PostWizardProps) => {
       await uploadMedia();
     } else if (step === 5) {
       await generateCaptions();
-      setStep(prev => prev + 1);
+      setStep(6);
     } else {
-      setStep(prev => Math.min(6, prev + 1));
+      setStep(Math.min(6, step + 1));
     }
   };
 
@@ -232,6 +232,8 @@ const WizardContent = ({ onComplete }: PostWizardProps) => {
         return <ToneStep />;
       case 6:
         return <CaptionsStep isGeneratingCaptions={isGeneratingCaptions} />;
+      default:
+        return null;
     }
   };
 

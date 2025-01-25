@@ -1,8 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { MediaDropzone } from '../../upload/MediaDropzone';
 import { MediaPreview } from '../../upload/MediaPreview';
 import { UploadProgress } from '../../upload/UploadProgress';
 import { useWizard } from '../WizardContext';
+import { Crop } from 'react-image-crop';
 
 interface UploadStepProps {
   isUploading: boolean;
@@ -25,6 +26,8 @@ export const UploadStep: React.FC<UploadStepProps> = ({
   } = useWizard();
   
   const imageRef = useRef<HTMLImageElement>(null);
+  const [crop, setCrop] = useState<Crop>();
+  const [rotation, setRotation] = useState(0);
 
   const onDrop = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
@@ -37,6 +40,10 @@ export const UploadStep: React.FC<UploadStepProps> = ({
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleRotate = () => {
+    setRotation((prev) => (prev + 90) % 360);
   };
 
   const startCamera = async () => {
@@ -71,6 +78,10 @@ export const UploadStep: React.FC<UploadStepProps> = ({
             }}
             imageRef={imageRef}
             fileType={fileType}
+            crop={crop}
+            onCropChange={setCrop}
+            rotation={rotation}
+            onRotate={handleRotate}
           />
           {isUploading && (
             <UploadProgress progress={uploadProgress} isUploading={isUploading} />
