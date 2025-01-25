@@ -188,12 +188,16 @@ export const PostWizard = ({ onComplete }: PostWizardProps) => {
         .from('media')
         .getPublicUrl(filePath);
 
+      // Create initial post with required fields
       const { data: post, error: dbError } = await supabase
         .from('posts')
         .insert({
+          user_id: user.id,
           image_url: publicUrl,
-          platform: platform || 'default',
-          user_id: user.id
+          platform: platform || 'Instagram', // Set a default platform
+          niche: niche || null,
+          goal: goal || null,
+          tone: tone || null
         })
         .select()
         .single();
@@ -267,7 +271,7 @@ export const PostWizard = ({ onComplete }: PostWizardProps) => {
           goal,
           tone,
           selected_caption: selectedCaption,
-          user_id: user.id // Ensure user_id is set
+          user_id: user.id
         })
         .eq('id', postId)
         .select()
