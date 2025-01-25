@@ -8,8 +8,8 @@ import { FinalCTA } from '@/components/home/FinalCTA';
 
 const Index = () => {
   return (
-    <div className="w-full min-h-screen bg-background">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-500">
+      <div className="container mx-auto px-4 overflow-hidden">
         <HeroSection />
         <div className="relative">
           {/* Background gradient orbs */}

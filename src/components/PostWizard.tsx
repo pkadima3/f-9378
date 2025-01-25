@@ -188,16 +188,12 @@ export const PostWizard = ({ onComplete }: PostWizardProps) => {
         .from('media')
         .getPublicUrl(filePath);
 
-      // Create initial post with required fields
       const { data: post, error: dbError } = await supabase
         .from('posts')
         .insert({
-          user_id: user.id,
           image_url: publicUrl,
-          platform: platform || 'Instagram', // Set a default platform
-          niche: niche || null,
-          goal: goal || null,
-          tone: tone || null
+          platform: platform || 'default',
+          user_id: user.id
         })
         .select()
         .single();
@@ -223,66 +219,21 @@ export const PostWizard = ({ onComplete }: PostWizardProps) => {
   };
 
   const handleComplete = async () => {
-    try {
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-      
-      if (userError || !user) {
-        toast({
-          title: "Authentication required",
-          description: "Please sign in to save your post.",
-          variant: "destructive",
-        });
-        navigate('/auth');
-        return;
-      }
-
-      if (!postId || !selectedCaption || !platform || !niche || !goal || !tone) {
-        console.log('Missing required fields:', { 
-          postId, 
-          selectedCaption, 
-          platform, 
-          niche, 
-          goal, 
-          tone 
-        });
-        toast({
-          title: "Missing information",
-          description: "Please fill in all required fields before saving.",
-          variant: "destructive",
-        });
-        return;
-      }
+    if (!postId || !selectedCaption) return;
     
-      console.log('Updating post with:', {
-        postId,
-        platform,
-        niche,
-        goal,
-        tone,
-        selectedCaption,
-        userId: user.id
-      });
-
-      const { data, error } = await supabase
+    try {
+      const { error } = await supabase
         .from('posts')
         .update({
           platform,
           niche,
           goal,
           tone,
-          selected_caption: selectedCaption,
-          user_id: user.id
+          selected_caption: selectedCaption
         })
-        .eq('id', postId)
-        .select()
-        .single();
+        .eq('id', postId);
 
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
-      }
-
-      console.log('Updated post:', data);
+      if (error) throw error;
 
       toast({
         title: "Post Created",
@@ -291,7 +242,6 @@ export const PostWizard = ({ onComplete }: PostWizardProps) => {
       
       onComplete();
     } catch (error) {
-      console.error('Error in handleComplete:', error);
       toast({
         title: "Error saving post",
         description: error instanceof Error ? error.message : "Failed to save post settings",

@@ -8,16 +8,16 @@ import TopBar from "./components/TopBar"
 function App() {
   return (
     <Router>
-      <div className="min-h-screen w-full bg-background">
+      <div className="min-h-screen flex flex-col">
         <TopBar />
-        <main className="w-full">
+        <div className="flex-1 pt-16">
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/caption-generator" element={<CaptionGenerator />} />
           </Routes>
-        </main>
+        </div>
       </div>
     </Router>
   )
