@@ -3,23 +3,16 @@ import { useDropzone } from 'react-dropzone';
 import { Camera, Upload } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from './ui/use-toast';
 
-interface MediaUploadProps {
-  onUpload: (url: string, type: string) => void;
-}
-
-export const MediaUpload = ({ onUpload }: MediaUploadProps) => {
+export const MediaUpload = ({ onFileSelect }: { onFileSelect: (file: File) => void }) => {
   const [isDragging, setIsDragging] = useState(false);
-  const { toast } = useToast();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
       if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
-        // For now, just create a local URL for the file
-        const url = URL.createObjectURL(file);
-        onUpload(url, file.type);
+        onFileSelect(file);
       } else {
         toast({
           title: "Invalid file type",
@@ -28,7 +21,7 @@ export const MediaUpload = ({ onUpload }: MediaUploadProps) => {
         });
       }
     }
-  }, [onUpload, toast]);
+  }, [onFileSelect]);
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
