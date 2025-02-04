@@ -2,9 +2,19 @@ import React from 'react';
 import { usePost } from './PostContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import { Platform } from '../PostWizard';
 
 interface PostManagerProps {
   onComplete: () => void;
+}
+
+interface ImageMetadata {
+  imageUrl: string;
+  fileType: string;
+  platform: Platform;
+  niche: string;
+  goal: string;
+  tone: string;
 }
 
 export const PostManager = ({ onComplete }: PostManagerProps) => {
@@ -20,7 +30,7 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
     setSelectedCaption,
   } = usePost();
 
-  const generateCaptions = async (imageMetadata: any) => {
+  const generateCaptions = async (imageMetadata: ImageMetadata) => {
     if (!platform || !niche || !goal || !tone || !imageMetadata) {
       toast({
         title: "Missing information",

@@ -64,7 +64,6 @@ export const PostUploader = ({ imageRef }: PostUploaderProps) => {
         .from('media')
         .getPublicUrl(filePath);
 
-      // Create initial post with required fields
       const { data: post, error: dbError } = await supabase
         .from('posts')
         .insert({
@@ -81,12 +80,14 @@ export const PostUploader = ({ imageRef }: PostUploaderProps) => {
 
       if (dbError) throw dbError;
 
-      setPostId(post.id);
-      setStep(2);
-      toast({
-        title: "Upload successful",
-        description: "Your media has been uploaded successfully.",
-      });
+      if (post) {
+        setPostId(post.id);
+        setStep(2);
+        toast({
+          title: "Upload successful",
+          description: "Your media has been uploaded successfully.",
+        });
+      }
     } catch (error) {
       console.error('Upload error:', error);
       toast({
