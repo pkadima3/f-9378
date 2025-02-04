@@ -1,4 +1,3 @@
-import React from 'react';
 import { usePost } from './PostContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
@@ -25,22 +24,14 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
     goal,
     tone,
     selectedCaption,
-    captions,
     setCaptions,
     setSelectedCaption,
   } = usePost();
 
   const generateCaptions = async (imageMetadata: ImageMetadata) => {
-    if (!platform || !niche || !goal || !tone || !imageMetadata) {
-      toast({
-        title: "Missing information",
-        description: "Please fill in all fields before generating captions.",
-        variant: "destructive",
-      });
-      return;
+    if (!platform || !niche || !goal || !tone) {
+      throw new Error("Missing required fields for caption generation");
     }
-
-    setCaptions([]); // Clear existing captions
 
     try {
       const { data, error } = await supabase.functions.invoke('generate-captions', {
@@ -62,16 +53,19 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
       });
     } catch (error) {
       console.error('Caption generation error:', error);
-      toast({
-        title: "Caption Generation Failed",
-        description: error instanceof Error ? error.message : "There was an error generating captions.",
-        variant: "destructive",
-      });
+      throw error;
     }
   };
 
   const handleComplete = async () => {
-    if (!postId || !selectedCaption) return;
+    if (!postId || !selectedCaption) {
+      toast({
+        title: "Error",
+        description: "Missing required information to complete the post",
+        variant: "destructive",
+      });
+      return;
+    }
     
     try {
       const { error } = await supabase
@@ -94,11 +88,8 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
       
       onComplete();
     } catch (error) {
-      toast({
-        title: "Error saving post",
-        description: error instanceof Error ? error.message : "Failed to save post settings",
-        variant: "destructive",
-      });
+      console.error('Error saving post:', error);
+      throw error;
     }
   };
 

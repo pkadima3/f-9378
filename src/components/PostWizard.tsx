@@ -44,31 +44,20 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
   };
 
   const handleNext = async () => {
-    if (step === 1 && file && preview) {
-      setIsUploading(true);
-      try {
+    try {
+      if (step === 1 && file && preview) {
+        setIsUploading(true);
         await uploadMedia();
-        setStep(2);
         toast({
           title: "Upload successful",
           description: "Your media has been uploaded successfully.",
         });
-      } catch (error) {
-        console.error('Upload error:', error);
-        toast({
-          title: "Upload failed",
-          description: "There was an error uploading your media. Please try again.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsUploading(false);
+        setStep(2);
+        return;
       }
-      return;
-    }
-    
-    if (step === 5) {
-      setIsGeneratingCaptions(true);
-      try {
+      
+      if (step === 5 && platform && niche && goal && tone) {
+        setIsGeneratingCaptions(true);
         await generateCaptions({
           imageUrl: preview,
           fileType: fileType,
@@ -78,20 +67,24 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
           tone
         });
         setStep(6);
-      } catch (error) {
-        console.error('Caption generation error:', error);
-        toast({
-          title: "Caption Generation Failed",
-          description: "There was an error generating captions. Please try again.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsGeneratingCaptions(false);
+        return;
       }
-      return;
+      
+      // For other steps, just move forward if validation passes
+      if (!isNextDisabled()) {
+        setStep(Math.min(6, step + 1));
+      }
+    } catch (error) {
+      console.error('Error in handleNext:', error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "An error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+      setIsGeneratingCaptions(false);
     }
-    
-    setStep(Math.min(6, step + 1));
   };
 
   const isNextDisabled = () => {
