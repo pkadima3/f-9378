@@ -15,6 +15,7 @@ serve(async (req) => {
 
   try {
     if (!openAIApiKey) {
+      console.error('OpenAI API key is not configured');
       throw new Error('OpenAI API key is not configured');
     }
 
@@ -22,6 +23,7 @@ serve(async (req) => {
     console.log('Received request with:', { platform, niche, goal, tone, imageMetadata });
 
     if (!platform || !niche || !goal || !tone) {
+      console.error('Missing required fields');
       throw new Error('Missing required fields');
     }
 
@@ -69,7 +71,7 @@ Important:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4',
         messages: [
           { role: 'system', content: 'You are a professional social media content creator.' },
           { role: 'user', content: prompt }
