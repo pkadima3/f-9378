@@ -14,10 +14,6 @@ serve(async (req) => {
   }
 
   try {
-    if (!openAIApiKey) {
-      throw new Error('OpenAI API key is not configured');
-    }
-
     const { platform, niche, goal, tone, imageMetadata } = await req.json();
     console.log('Received request with:', { platform, niche, goal, tone, imageMetadata });
 
@@ -25,27 +21,30 @@ serve(async (req) => {
       throw new Error('Missing required fields');
     }
 
-    const prompt = `You are the world's leading content creator and digital marketing expert with 20 years of hands-on experience. Create 3 detailed and creative social media post captions for the ${niche} industry, designed to achieve the goal of ${goal} in a ${tone} tone, taking into consideration the following image context: ${JSON.stringify(imageMetadata)}.
+    const prompt = `
+Role: You are the world's top content creator and digital marketing expert with over 20 years of hands-on experience.
+Goal: Create 3 highly engaging and detailed social media captions for the ${niche} industry, tailored to achieve the goal of ${goal} in the selected tone (${tone}). These captions must align with the ${platform}'s audience and include relevant ${JSON.stringify(imageMetadata)}.
 
-The captions must:
-1. Ensure captions are concise and meet ${platform}'s character limits
-2. Incorporate hashtags that are highly relevant to the ${niche} industry
-3. Include an effective call-to-action to inspire engagement
-4. Reflect current trends, use platform-specific language, and include emojis where appropriate
+Caption Guidelines:
+
+Ensure captions are concise and meet ${platform}'s character limits (e.g., Instagram: 2200 characters, Twitter: 280 characters).
+Incorporate hashtags that are highly relevant to the ${niche} industry to maximize visibility and engagement.
+Include an optional, effective call-to-action to inspire engagement (e.g., "Comment below," "Tag a friend," "Share your thoughts," "Did you know?" "Fact," or "Insight").
+Reflect current trends, use platform-specific language, and include emojis where appropriate to match audience expectations and boost relatability.
 
 Format each caption exactly like this (with no variations):
 
-[b]Title 1[/b]
+**Title 1**
 [Caption text 1]
 [Hashtags 1]
 [Call to action 1]
 
-[b]Title 2[/b]
+**Title 2**
 [Caption text 2]
 [Hashtags 2]
 [Call to action 2]
 
-[b]Title 3[/b]
+**Title 3**
 [Caption text 3]
 [Hashtags 3]
 [Call to action 3]
