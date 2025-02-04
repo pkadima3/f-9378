@@ -14,6 +14,10 @@ serve(async (req) => {
   }
 
   try {
+    if (!openAIApiKey) {
+      throw new Error('OpenAI API key is not configured');
+    }
+
     const { platform, niche, goal, tone, imageMetadata } = await req.json();
     console.log('Received request with:', { platform, niche, goal, tone, imageMetadata });
 
