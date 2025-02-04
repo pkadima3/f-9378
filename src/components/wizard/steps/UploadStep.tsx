@@ -12,13 +12,6 @@ export const UploadStep: React.FC<UploadStepProps> = ({ onUpload }) => {
   const { file, preview, fileType } = usePost();
   const imageRef = React.useRef<HTMLImageElement>(null);
 
-  const handleDrop = (acceptedFiles: File[]) => {
-    const selectedFile = acceptedFiles[0];
-    if (selectedFile) {
-      onUpload(selectedFile);
-    }
-  };
-
   return (
     <div className="space-y-6">
       <Card className="p-6">
@@ -26,7 +19,11 @@ export const UploadStep: React.FC<UploadStepProps> = ({ onUpload }) => {
         <div className="space-y-4">
           {!file && (
             <MediaDropzone
-              onDrop={handleDrop}
+              onDrop={(acceptedFiles) => {
+                if (acceptedFiles.length > 0) {
+                  onUpload(acceptedFiles[0]);
+                }
+              }}
             />
           )}
 

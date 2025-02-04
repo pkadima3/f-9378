@@ -57,7 +57,7 @@ export const PostUploader = () => {
         .insert({
           user_id: session.user.id,
           image_url: publicUrl,
-          platform: undefined,
+          platform: '',
           niche: '',
           goal: '',
           tone: ''

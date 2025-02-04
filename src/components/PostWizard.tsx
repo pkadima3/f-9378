@@ -61,7 +61,6 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
         return;
       }
       await uploadMedia();
-      setStep(2);
     } else if (step === 5) {
       setIsGeneratingCaptions(true);
       await generateCaptions({
