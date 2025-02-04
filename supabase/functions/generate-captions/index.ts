@@ -9,6 +9,7 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -21,11 +22,6 @@ serve(async (req) => {
 
     const { platform, niche, goal, tone, imageMetadata } = await req.json();
     console.log('Received request with:', { platform, niche, goal, tone, imageMetadata });
-
-    if (!platform || !niche || !goal || !tone) {
-      console.error('Missing required fields');
-      throw new Error('Missing required fields');
-    }
 
     const prompt = `
 Role: You are the world's top content creator and digital marketing expert with over 20 years of hands-on experience.
@@ -71,7 +67,7 @@ Important:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4',
+        model: 'gpt-4o-mini',
         messages: [
           { role: 'system', content: 'You are a professional social media content creator.' },
           { role: 'user', content: prompt }

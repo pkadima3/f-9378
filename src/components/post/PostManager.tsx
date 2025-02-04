@@ -34,6 +34,8 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
     }
 
     try {
+      console.log('Generating captions with metadata:', imageMetadata);
+      
       const { data, error } = await supabase.functions.invoke('generate-captions', {
         body: { platform, niche, goal, tone, imageMetadata },
       });
