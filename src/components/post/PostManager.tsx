@@ -38,12 +38,17 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
         body: { platform, niche, goal, tone, imageMetadata },
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw error;
+      }
 
       if (!data?.captions || !Array.isArray(data.captions)) {
+        console.error('Invalid response format:', data);
         throw new Error('Invalid response format from caption generation');
       }
 
+      console.log('Generated captions:', data.captions);
       setCaptions(data.captions);
       setSelectedCaption(data.captions[0]);
       
@@ -53,6 +58,11 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
       });
     } catch (error) {
       console.error('Caption generation error:', error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to generate captions",
+        variant: "destructive",
+      });
       throw error;
     }
   };
@@ -89,6 +99,11 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
       onComplete();
     } catch (error) {
       console.error('Error saving post:', error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to save post",
+        variant: "destructive",
+      });
       throw error;
     }
   };
