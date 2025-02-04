@@ -35,6 +35,10 @@ const TopBar = () => {
     navigate("/")
   }
 
+  const handleAuthNavigation = (mode: 'signin' | 'signup') => {
+    navigate(`/auth?mode=${mode}`)
+  }
+
   return (
     <header className="fixed top-0 w-full border-b bg-background z-50">
       <div className="container flex h-16 items-center justify-between">
@@ -140,11 +144,11 @@ const TopBar = () => {
             </DropdownMenu>
           ) : (
             <>
-              <Button variant="ghost" asChild>
-                <Link to="/auth">Login</Link>
+              <Button variant="ghost" onClick={() => handleAuthNavigation('signin')}>
+                Login
               </Button>
-              <Button className="bg-[#4461F2] hover:bg-[#4461F2]/90" asChild>
-                <Link to="/auth">Sign up</Link>
+              <Button className="bg-[#4461F2] hover:bg-[#4461F2]/90" onClick={() => handleAuthNavigation('signup')}>
+                Sign up
               </Button>
             </>
           )}
