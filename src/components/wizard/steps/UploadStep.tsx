@@ -90,9 +90,7 @@ export const UploadStep: React.FC<UploadStepProps> = ({
             onRotate={handleRotate}
             imageRef={imageRef}
           />
-          {isUploading && (
-            <UploadProgress progress={uploadProgress} isUploading={isUploading} />
-          )}
+          <UploadProgress progress={uploadProgress} isUploading={isUploading} />
         </>
       )}
     </div>
