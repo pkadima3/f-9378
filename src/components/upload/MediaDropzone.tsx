@@ -7,7 +7,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 interface MediaDropzoneProps {
   onDrop: (acceptedFiles: File[]) => void;
-  onCameraStart: () => void;
+  onCameraStart?: () => void;
 }
 
 export const MediaDropzone = ({ onDrop, onCameraStart }: MediaDropzoneProps) => {
@@ -41,7 +41,7 @@ export const MediaDropzone = ({ onDrop, onCameraStart }: MediaDropzoneProps) => 
         </div>
       </div>
 
-      {isMobile && (
+      {isMobile && onCameraStart && (
         <div className="mt-6 flex justify-center">
           <Button onClick={onCameraStart} variant="outline" className="flex items-center gap-2">
             <Camera className="w-4 h-4" />

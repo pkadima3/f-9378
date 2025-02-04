@@ -8,10 +8,10 @@ import { VideoPreview } from '../preview/VideoPreview';
 interface MediaPreviewProps {
   preview: string;
   crop?: Crop;
-  onCropChange: (c: Crop) => void;
+  onCropChange?: (c: Crop) => void;
   rotation: number;
   onRotate: () => void;
-  onClear: () => void;
+  onClear?: () => void;
   imageRef: React.RefObject<HTMLImageElement>;
   fileType?: string;
 }
@@ -31,14 +31,16 @@ export const MediaPreview = ({
   return (
     <Card className="p-6 space-y-6">
       <div className="relative">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-2 right-2 z-10"
-          onClick={onClear}
-        >
-          <X className="w-4 h-4" />
-        </Button>
+        {onClear && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-2 right-2 z-10"
+            onClick={onClear}
+          >
+            <X className="w-4 h-4" />
+          </Button>
+        )}
         
         {isVideo ? (
           <VideoPreview src={preview} />

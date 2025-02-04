@@ -4,25 +4,12 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
 import { processMediaFile } from '@/utils/mediaUtils';
 
-interface PostUploaderProps {
-  file: File | null;
-  imageRef: React.RefObject<HTMLImageElement>;
-  setPostId: (id: string) => void;
-  setStep: (step: number) => void;
-}
-
-export const PostUploader = ({
-  file,
-  imageRef,
-  setPostId,
-  setStep,
-}: PostUploaderProps) => {
-  const { platform, niche, goal, tone } = usePost();
+export const PostUploader = () => {
+  const { file, setPostId, setStep } = usePost();
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const uploadMedia = async () => {
-    // Check if file exists
     if (!file) {
       toast({
         title: "No file selected",
@@ -32,7 +19,6 @@ export const PostUploader = ({
       return;
     }
 
-    // Get current session
     const { data: { session } } = await supabase.auth.getSession();
     if (!session?.user) {
       toast({
@@ -47,54 +33,40 @@ export const PostUploader = ({
     setUploadProgress(0);
 
     try {
-      // Process the file (handle crop, rotation if needed)
-      const { finalBlob, metadata } = await processMediaFile(
-        file,
-        undefined,
-        undefined,
-        imageRef.current
-      );
-
-      // Generate a unique filename
       const fileExt = file.name.split('.').pop();
       const fileName = `${crypto.randomUUID()}.${fileExt}`;
       const filePath = `${session.user.id}/${fileName}`;
 
-      // Upload to Supabase Storage
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('media')
-        .upload(filePath, finalBlob, {
+        .upload(filePath, file, {
           contentType: file.type,
           cacheControl: '3600',
           upsert: false
         });
 
       if (uploadError) {
-        console.error('Upload error:', uploadError);
         throw uploadError;
       }
 
-      // Get the public URL
       const { data: { publicUrl } } = supabase.storage
         .from('media')
         .getPublicUrl(filePath);
 
-      // Save post data to the database
       const { data: post, error: dbError } = await supabase
         .from('posts')
         .insert({
           user_id: session.user.id,
           image_url: publicUrl,
-          platform,
-          niche,
-          goal,
-          tone
+          platform: undefined,
+          niche: '',
+          goal: '',
+          tone: ''
         })
         .select()
         .single();
 
       if (dbError) {
-        console.error('Database error:', dbError);
         throw dbError;
       }
 
@@ -102,7 +74,7 @@ export const PostUploader = ({
       
       if (post) {
         setPostId(post.id);
-        setStep(2); // Move to next step
+        setStep(2);
         toast({
           title: "Upload successful",
           description: "Your media has been uploaded successfully.",
@@ -120,13 +92,9 @@ export const PostUploader = ({
     }
   };
 
-  return (
-    <button
-      onClick={uploadMedia}
-      disabled={isUploading || !file}
-      className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
-    >
-      {isUploading ? 'Uploading...' : 'Upload Media'}
-    </button>
-  );
+  return {
+    uploadMedia,
+    isUploading,
+    uploadProgress
+  };
 };
