@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
 import { usePost } from './PostContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
 
 export const PostUploader = () => {
-  const { file, setPostId, setStep } = usePost();
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
+  const { file, setPostId } = usePost();
 
   const uploadMedia = async () => {
     if (!file) {
@@ -27,9 +24,6 @@ export const PostUploader = () => {
       });
       return;
     }
-
-    setIsUploading(true);
-    setUploadProgress(0);
 
     try {
       const fileExt = file.name.split('.').pop();
@@ -69,31 +63,16 @@ export const PostUploader = () => {
         throw dbError;
       }
 
-      setUploadProgress(100);
-      
       if (post) {
         setPostId(post.id);
-        setStep(2);
-        toast({
-          title: "Upload successful",
-          description: "Your media has been uploaded successfully.",
-        });
       }
     } catch (error: any) {
       console.error('Upload error:', error);
-      toast({
-        title: "Upload failed",
-        description: error.message || "There was an error uploading your media",
-        variant: "destructive",
-      });
-    } finally {
-      setIsUploading(false);
+      throw error;
     }
   };
 
   return {
-    uploadMedia,
-    isUploading,
-    uploadProgress
+    uploadMedia
   };
 };

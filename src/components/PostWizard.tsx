@@ -43,7 +43,7 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
 
   const imageRef = useRef<HTMLImageElement>(null);
   const [isGeneratingCaptions, setIsGeneratingCaptions] = React.useState(false);
-  const { uploadMedia, isUploading, uploadProgress } = PostUploader();
+  const { uploadMedia } = PostUploader();
   const { generateCaptions, handleComplete } = PostManager({ onComplete });
 
   const handleBack = () => {
@@ -60,7 +60,21 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
         });
         return;
       }
-      await uploadMedia();
+      try {
+        await uploadMedia();
+        setStep(2);
+        toast({
+          title: "Upload successful",
+          description: "Your media has been uploaded successfully.",
+        });
+      } catch (error) {
+        toast({
+          title: "Upload failed",
+          description: "There was an error uploading your media. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
     } else if (step === 5) {
       setIsGeneratingCaptions(true);
       await generateCaptions({
