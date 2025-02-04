@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
+import { Mail, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import FormField from "./FormField";
+import PasswordInput from "./PasswordInput";
 
 interface AuthFormProps {
   isSignUp: boolean;
@@ -16,8 +17,6 @@ const AuthForm = ({ isSignUp, onToggleMode }: AuthFormProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -91,72 +90,38 @@ const AuthForm = ({ isSignUp, onToggleMode }: AuthFormProps) => {
       )}
 
       {isSignUp && (
-        <div className="relative">
-          <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-          <Input
-            name="username"
-            placeholder="Choose a username"
-            value={formData.username}
-            onChange={handleInputChange}
-            className="pl-10"
-            required
-          />
-        </div>
+        <FormField
+          Icon={User}
+          name="username"
+          placeholder="Choose a username"
+          value={formData.username}
+          onChange={handleInputChange}
+        />
       )}
       
-      <div className="relative">
-        <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-        <Input
-          name="email"
-          type="email"
-          placeholder="Enter your email"
-          value={formData.email}
-          onChange={handleInputChange}
-          className="pl-10"
-          required
-        />
-      </div>
+      <FormField
+        Icon={Mail}
+        name="email"
+        type="email"
+        placeholder="Enter your email"
+        value={formData.email}
+        onChange={handleInputChange}
+      />
 
-      <div className="relative">
-        <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-        <Input
-          name="password"
-          type={showPassword ? "text" : "password"}
-          placeholder={isSignUp ? "Create a password" : "Enter your password"}
-          value={formData.password}
-          onChange={handleInputChange}
-          className="pl-10 pr-10"
-          required
-        />
-        <button
-          type="button"
-          onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-3 text-gray-400"
-        >
-          {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-        </button>
-      </div>
+      <PasswordInput
+        name="password"
+        placeholder={isSignUp ? "Create a password" : "Enter your password"}
+        value={formData.password}
+        onChange={handleInputChange}
+      />
 
       {isSignUp && (
-        <div className="relative">
-          <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-          <Input
-            name="confirmPassword"
-            type={showConfirmPassword ? "text" : "password"}
-            placeholder="Confirm your password"
-            value={formData.confirmPassword}
-            onChange={handleInputChange}
-            className="pl-10 pr-10"
-            required
-          />
-          <button
-            type="button"
-            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute right-3 top-3 text-gray-400"
-          >
-            {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-          </button>
-        </div>
+        <PasswordInput
+          name="confirmPassword"
+          placeholder="Confirm your password"
+          value={formData.confirmPassword}
+          onChange={handleInputChange}
+        />
       )}
 
       <Button
