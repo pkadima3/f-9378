@@ -43,6 +43,7 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
 
   const imageRef = useRef<HTMLImageElement>(null);
   const [isGeneratingCaptions, setIsGeneratingCaptions] = React.useState(false);
+  const [isUploading, setIsUploading] = React.useState(false);
   const { uploadMedia } = PostUploader();
   const { generateCaptions, handleComplete } = PostManager({ onComplete });
 
@@ -51,15 +52,8 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
   };
 
   const handleNext = async () => {
-    if (step === 1) {
-      if (!file || !preview) {
-        toast({
-          title: "No media selected",
-          description: "Please upload an image or video first.",
-          variant: "destructive",
-        });
-        return;
-      }
+    if (step === 1 && file && preview) {
+      setIsUploading(true);
       try {
         await uploadMedia();
         setStep(2);
@@ -68,34 +62,48 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
           description: "Your media has been uploaded successfully.",
         });
       } catch (error) {
+        console.error('Upload error:', error);
         toast({
           title: "Upload failed",
           description: "There was an error uploading your media. Please try again.",
           variant: "destructive",
         });
-        return;
+      } finally {
+        setIsUploading(false);
       }
     } else if (step === 5) {
       setIsGeneratingCaptions(true);
-      await generateCaptions({
-        imageUrl: preview,
-        fileType: fileType,
-        platform,
-        niche,
-        goal,
-        tone
-      });
-      setIsGeneratingCaptions(false);
-      setStep(6);
+      try {
+        await generateCaptions({
+          imageUrl: preview,
+          fileType: fileType,
+          platform,
+          niche,
+          goal,
+          tone
+        });
+        setStep(6);
+      } catch (error) {
+        console.error('Caption generation error:', error);
+        toast({
+          title: "Caption Generation Failed",
+          description: "There was an error generating captions. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsGeneratingCaptions(false);
+      }
     } else {
       setStep(Math.min(6, step + 1));
     }
   };
 
   const isNextDisabled = () => {
+    if (isUploading || isGeneratingCaptions) return true;
+    
     switch (step) {
       case 1:
-        return !preview;
+        return !file || !preview;
       case 2:
         return !platform;
       case 3:
@@ -151,6 +159,7 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
           onNext={handleNext}
           onComplete={handleComplete}
           isNextDisabled={isNextDisabled()}
+          isLoading={isUploading || isGeneratingCaptions}
         >
           {renderStep()}
         </PostSteps>

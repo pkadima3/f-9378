@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '../ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 
 interface PostStepsProps {
   step: number;
@@ -8,6 +8,7 @@ interface PostStepsProps {
   onNext: () => void;
   onComplete: () => void;
   isNextDisabled: boolean;
+  isLoading?: boolean;
   children: React.ReactNode;
 }
 
@@ -16,7 +17,8 @@ export const PostSteps = ({
   onBack, 
   onNext, 
   onComplete, 
-  isNextDisabled, 
+  isNextDisabled,
+  isLoading = false,
   children 
 }: PostStepsProps) => {
   return (
@@ -46,7 +48,7 @@ export const PostSteps = ({
         <Button
           variant="ghost"
           onClick={onBack}
-          disabled={step === 1}
+          disabled={step === 1 || isLoading}
           className="flex items-center gap-2"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -54,11 +56,21 @@ export const PostSteps = ({
         </Button>
         
         {step < 6 ? (
-          <Button onClick={onNext} disabled={isNextDisabled}>
-            Next
+          <Button 
+            onClick={onNext} 
+            disabled={isNextDisabled}
+            className="flex items-center gap-2"
+          >
+            {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+            {isLoading ? 'Processing...' : 'Next'}
           </Button>
         ) : (
-          <Button onClick={onComplete} disabled={isNextDisabled}>
+          <Button 
+            onClick={onComplete} 
+            disabled={isNextDisabled}
+            className="flex items-center gap-2"
+          >
+            {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
             Complete
           </Button>
         )}
