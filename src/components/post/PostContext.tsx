@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { Platform } from '@/types/post';
+import { Platform, Goal, Tone } from '@/types/post';
 import { Crop } from 'react-image-crop';
 
 interface PostContextType {
@@ -9,10 +9,10 @@ interface PostContextType {
   setPlatform: (platform: Platform) => void;
   niche: string;
   setNiche: (niche: string) => void;
-  goal: string;
-  setGoal: (goal: string) => void;
-  tone: string;
-  setTone: (tone: string) => void;
+  goal: Goal | undefined;
+  setGoal: (goal: Goal) => void;
+  tone: Tone | undefined;
+  setTone: (tone: Tone) => void;
   file: File | null;
   setFile: (file: File | null) => void;
   preview: string;
@@ -39,8 +39,8 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [step, setStep] = useState(1);
   const [platform, setPlatform] = useState<Platform>();
   const [niche, setNiche] = useState('');
-  const [goal, setGoal] = useState('');
-  const [tone, setTone] = useState('');
+  const [goal, setGoal] = useState<Goal>();
+  const [tone, setTone] = useState<Tone>();
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState('');
   const [fileType, setFileType] = useState('');

@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import { Card } from './ui/card';
 import { PostSteps } from './post/PostSteps';
 import { PostPreview } from './preview/PostPreview';
-import { useWizard } from './wizard/WizardContext';
 import { usePost } from './post/PostContext';
 import { PostUploader } from './post/PostUploader';
 import { PostManager } from './post/PostManager';
@@ -25,13 +24,13 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
     fileType,
     selectedCaption,
     overlayEnabled,
-  } = useWizard();
-
-  const {
     file,
     setFile,
     setPreview,
-    setFileType
+    setFileType,
+    captions,
+    setCaptions,
+    setSelectedCaption
   } = usePost();
 
   const imageRef = useRef<HTMLImageElement>(null);
