@@ -43,7 +43,7 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
 
   const imageRef = useRef<HTMLImageElement>(null);
   const [isGeneratingCaptions, setIsGeneratingCaptions] = React.useState(false);
-  const { uploadMedia, isUploading, uploadProgress } = PostUploader({ imageRef });
+  const { uploadMedia, isUploading, uploadProgress } = PostUploader();
   const { generateCaptions, handleComplete } = PostManager({ onComplete });
 
   const handleBack = () => {
@@ -103,8 +103,6 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
       case 1:
         return (
           <UploadStep
-            isUploading={isUploading}
-            uploadProgress={uploadProgress}
             onUpload={(file) => {
               setFile(file);
               const reader = new FileReader();

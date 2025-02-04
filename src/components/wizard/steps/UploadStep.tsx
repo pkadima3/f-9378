@@ -1,23 +1,21 @@
 import React from 'react';
 import { MediaDropzone } from '@/components/upload/MediaDropzone';
 import { MediaPreview } from '@/components/upload/MediaPreview';
-import { UploadProgress } from '@/components/upload/UploadProgress';
 import { usePost } from '@/components/post/PostContext';
 import { Card } from '@/components/ui/card';
 
-export const UploadStep = () => {
-  const { file, setFile, preview, setPreview, setFileType } = usePost();
+interface UploadStepProps {
+  onUpload: (file: File) => void;
+}
+
+export const UploadStep: React.FC<UploadStepProps> = ({ onUpload }) => {
+  const { file, preview, fileType } = usePost();
+  const imageRef = React.useRef<HTMLImageElement>(null);
 
   const handleDrop = (acceptedFiles: File[]) => {
     const selectedFile = acceptedFiles[0];
     if (selectedFile) {
-      setFile(selectedFile);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result as string);
-        setFileType(selectedFile.type);
-      };
-      reader.readAsDataURL(selectedFile);
+      onUpload(selectedFile);
     }
   };
 
@@ -37,7 +35,8 @@ export const UploadStep = () => {
               preview={preview}
               rotation={0}
               onRotate={() => {}}
-              imageRef={React.useRef<HTMLImageElement>(null)}
+              imageRef={imageRef}
+              fileType={fileType}
             />
           )}
         </div>

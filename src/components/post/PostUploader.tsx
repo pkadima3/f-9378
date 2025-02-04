@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { usePost } from './PostContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
-import { processMediaFile } from '@/utils/mediaUtils';
 
 export const PostUploader = () => {
   const { file, setPostId, setStep } = usePost();
