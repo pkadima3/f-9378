@@ -5,12 +5,12 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
 const Auth = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Check if the URL has ?mode=signup to determine initial state
   const [isSignUp, setIsSignUp] = useState(() => {
     const searchParams = new URLSearchParams(location.search);
     return searchParams.get('mode') === 'signup';
@@ -27,11 +27,24 @@ const Auth = () => {
     username: "",
   });
 
+  useEffect(() => {
+    // Check if user is already logged in
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate('/');
+      }
+    };
+    checkUser();
+  }, [navigate]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    // Clear error when user starts typing
+    setErrorMessage("");
   };
 
   const handleAuth = async (e: React.FormEvent) => {
@@ -54,6 +67,11 @@ const Auth = () => {
           },
         });
         if (error) throw error;
+        
+        toast({
+          title: "Success!",
+          description: "Please check your email to confirm your account.",
+        });
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email: formData.email,
@@ -65,6 +83,11 @@ const Auth = () => {
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(error.message);
+        toast({
+          title: "Authentication error",
+          description: error.message,
+          variant: "destructive",
+        });
       }
     } finally {
       setLoading(false);
