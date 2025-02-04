@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { Platform } from '../PostWizard';
+import { Platform } from '@/types/post';
 import { Crop } from 'react-image-crop';
 
 interface PostContextType {

@@ -2,7 +2,7 @@ import React from 'react';
 import { usePost } from './PostContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
-import { Platform } from '../PostWizard';
+import { Platform } from '@/types/post';
 
 interface PostManagerProps {
   onComplete: () => void;

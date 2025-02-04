@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '../../ui/button';
-import { Platform } from '../../PostWizard';
+import { Platform } from '@/types/post';
 import { useWizard } from '../WizardContext';
 
 export const PlatformStep = () => {

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Button } from '../ui/button';
 import { toast } from '@/hooks/use-toast';
 import { Instagram, Twitter, Linkedin, Facebook, Share2, Download, Link2 } from 'lucide-react';
-import { Platform } from '../PostWizard';
+import { Platform } from '@/types/post';
 import html2canvas from 'html2canvas';
 
 interface ShareOptionsProps {

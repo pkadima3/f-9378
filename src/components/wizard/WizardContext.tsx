@@ -1,8 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { Platform } from '../PostWizard';
-
-type Goal = 'Sales' | 'Drive Engagement' | 'Grow Followers' | 'Share Knowledge' | 'Brand Awareness';
-type Tone = 'Professional' | 'Casual' | 'Humorous' | 'Persuasive' | 'Inspirational';
+import { Platform, Goal, Tone } from '@/types/post';
 
 interface WizardContextType {
   step: number;
