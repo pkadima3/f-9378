@@ -6,15 +6,8 @@ import { useWizard } from './wizard/WizardContext';
 import { usePost } from './post/PostContext';
 import { PostUploader } from './post/PostUploader';
 import { PostManager } from './post/PostManager';
-import { UploadStep } from './wizard/steps/UploadStep';
-import { PlatformStep } from './wizard/steps/PlatformStep';
-import { NicheStep } from './wizard/steps/NicheStep';
-import { GoalStep } from './wizard/steps/GoalStep';
-import { ToneStep } from './wizard/steps/ToneStep';
-import { CaptionsStep } from './wizard/steps/CaptionsStep';
-import { toast } from './ui/use-toast';
-
-export type Platform = 'Instagram' | 'LinkedIn' | 'Facebook' | 'Twitter';
+import { WizardStepManager } from './wizard/WizardStepManager';
+import { toast } from '@/hooks/use-toast';
 
 interface PostWizardProps {
   onComplete: () => void;
@@ -71,7 +64,10 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
       } finally {
         setIsUploading(false);
       }
-    } else if (step === 5) {
+      return;
+    }
+    
+    if (step === 5) {
       setIsGeneratingCaptions(true);
       try {
         await generateCaptions({
@@ -93,9 +89,10 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
       } finally {
         setIsGeneratingCaptions(false);
       }
-    } else {
-      setStep(Math.min(6, step + 1));
+      return;
     }
+    
+    setStep(Math.min(6, step + 1));
   };
 
   const isNextDisabled = () => {
@@ -119,35 +116,14 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
     }
   };
 
-  const renderStep = () => {
-    switch (step) {
-      case 1:
-        return (
-          <UploadStep
-            onUpload={(file) => {
-              setFile(file);
-              const reader = new FileReader();
-              reader.onloadend = () => {
-                setPreview(reader.result as string);
-                setFileType(file.type);
-              };
-              reader.readAsDataURL(file);
-            }}
-          />
-        );
-      case 2:
-        return <PlatformStep />;
-      case 3:
-        return <NicheStep />;
-      case 4:
-        return <GoalStep />;
-      case 5:
-        return <ToneStep />;
-      case 6:
-        return <CaptionsStep isGeneratingCaptions={isGeneratingCaptions} />;
-      default:
-        return null;
-    }
+  const handleFileUpload = (file: File) => {
+    setFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreview(reader.result as string);
+      setFileType(file.type);
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -161,7 +137,11 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
           isNextDisabled={isNextDisabled()}
           isLoading={isUploading || isGeneratingCaptions}
         >
-          {renderStep()}
+          <WizardStepManager
+            step={step}
+            isGeneratingCaptions={isGeneratingCaptions}
+            onUpload={handleFileUpload}
+          />
         </PostSteps>
       </Card>
 

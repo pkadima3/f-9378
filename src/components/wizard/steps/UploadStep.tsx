@@ -11,6 +11,15 @@ interface UploadStepProps {
 export const UploadStep: React.FC<UploadStepProps> = ({ onUpload }) => {
   const { file, preview, fileType } = usePost();
   const imageRef = React.useRef<HTMLImageElement>(null);
+  const [rotation, setRotation] = React.useState(0);
+
+  const handleRotate = () => {
+    setRotation((prev) => (prev + 90) % 360);
+  };
+
+  const handleClear = () => {
+    onUpload(null as any);
+  };
 
   return (
     <div className="space-y-6">
@@ -30,8 +39,9 @@ export const UploadStep: React.FC<UploadStepProps> = ({ onUpload }) => {
           {file && preview && (
             <MediaPreview
               preview={preview}
-              rotation={0}
-              onRotate={() => {}}
+              rotation={rotation}
+              onRotate={handleRotate}
+              onClear={handleClear}
               imageRef={imageRef}
               fileType={fileType}
             />
