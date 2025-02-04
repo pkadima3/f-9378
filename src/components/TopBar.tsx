@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { Button } from "./ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
@@ -25,14 +25,50 @@ import {
   Menu,
 } from "lucide-react"
 import { supabase } from "@/integrations/supabase/client"
+import { useToast } from "@/hooks/use-toast"
 
 const TopBar = () => {
   const [session, setSession] = useState<any>(null)
   const navigate = useNavigate()
+  const { toast } = useToast()
+
+  useEffect(() => {
+    // Fetch initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+      if (session) {
+        toast({
+          title: "Success!",
+          description: "You have successfully signed in.",
+        })
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [toast])
 
   const handleLogout = async () => {
-    await supabase.auth.signOut()
-    navigate("/")
+    try {
+      await supabase.auth.signOut()
+      toast({
+        title: "Success!",
+        description: "You have been logged out.",
+      })
+      navigate("/")
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to log out. Please try again.",
+        variant: "destructive",
+      })
+    }
   }
 
   const handleAuthNavigation = (mode: 'signin' | 'signup') => {

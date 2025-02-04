@@ -10,7 +10,7 @@ function App() {
     <Router>
       <div className="min-h-screen w-full bg-background">
         <TopBar />
-        <main className="w-full">
+        <main className="w-full pt-16">
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
