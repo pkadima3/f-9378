@@ -3,11 +3,11 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -24,23 +24,19 @@ serve(async (req) => {
     const prompt = `
 Role: You are the world's top content creator and digital marketing expert with over 20 years of hands-on experience.
 
-Task: Create 3 unique and engaging social media captions for ${platform}, considering:
-- Niche: ${niche}
-- Goal: ${goal}
-- Tone: ${tone}
+Task: Create engaging social media captions for ${platform} that will resonate with the ${niche} niche.
+The goal is to ${goal} with a ${tone} tone.
 
 Requirements:
 1. Each caption should start with a title in this format: **Title Here**
-2. Make captions engaging and authentic
-3. Include relevant hashtags
-4. Keep the length appropriate for ${platform}
-5. Format each caption with a clear title and body
+2. Each caption should be unique and engaging
+3. Include relevant hashtags where appropriate
+4. Keep the tone ${tone} throughout
+5. Focus on ${goal} as the main objective
+6. Make it suitable for ${platform}'s audience
+7. Target the ${niche} niche specifically
 
-Example format:
-**Title of Caption**
-Main caption text here with emojis and #hashtags
-
-Please provide 3 different captions, each with a unique angle or approach.`;
+Please provide 3 different captions, each with a unique angle or approach. Format each caption with a title followed by the content.`;
 
     console.log('Sending request to OpenAI with prompt:', prompt);
 
@@ -51,7 +47,7 @@ Please provide 3 different captions, each with a unique angle or approach.`;
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4',
         messages: [
           { role: 'system', content: 'You are a professional social media content creator.' },
           { role: 'user', content: prompt }
@@ -69,8 +65,7 @@ Please provide 3 different captions, each with a unique angle or approach.`;
       throw new Error('Failed to generate captions');
     }
 
-    const generatedText = result.choices[0].message.content;
-    const captions = generatedText
+    const captions = result.choices[0].message.content
       .split('\n\n')
       .filter(caption => caption.trim().length > 0);
 
