@@ -1,10 +1,14 @@
 import React from 'react';
 import { Button } from '../../ui/button';
 import { Platform } from '@/types/post';
-import { useWizard } from '../WizardContext';
+import { usePost } from '../../post/PostContext';
 
 export const PlatformStep = () => {
-  const { platform, setPlatform } = useWizard();
+  const { platform, setPlatform } = usePost();
+
+  const handlePlatformSelect = (selectedPlatform: Platform) => {
+    setPlatform(selectedPlatform);
+  };
 
   return (
     <div className="space-y-6">
@@ -20,7 +24,7 @@ export const PlatformStep = () => {
             key={p}
             variant={platform === p ? "default" : "outline"}
             className="h-12"
-            onClick={() => setPlatform(p)}
+            onClick={() => handlePlatformSelect(p)}
           >
             {p}
           </Button>

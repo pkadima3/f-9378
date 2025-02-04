@@ -6,7 +6,7 @@ import { usePost } from './post/PostContext';
 import { PostUploader } from './post/PostUploader';
 import { PostManager } from './post/PostManager';
 import { WizardStepManager } from './wizard/WizardStepManager';
-import { toast } from '@/hooks/use-toast';
+import { toast } from './ui/use-toast';
 
 interface PostWizardProps {
   onComplete: () => void;
@@ -149,5 +149,3 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
     </div>
   );
 };
-
-export default PostWizard;
