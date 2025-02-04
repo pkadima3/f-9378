@@ -32,7 +32,7 @@ export const CaptionEditor = ({
 
   if (isLoading) {
     return (
-      <Card className="p-6">
+      <Card className="p-6 animate-fade-in">
         <div className="space-y-4">
           <Skeleton className="h-20 w-full" />
           <Skeleton className="h-20 w-full" />
@@ -54,14 +54,14 @@ export const CaptionEditor = ({
 
   return (
     <Card className="p-6">
-      <h3 className="text-lg font-semibold mb-4">AI Caption Generator</h3>
+      <h3 className="text-lg font-semibold mb-4">Generated Captions</h3>
       <RadioGroup
         value={selectedCaption}
         onValueChange={onSelect}
         className="space-y-6"
       >
         {captions.map((caption, index) => (
-          <div key={index} className="border rounded-lg p-4 space-y-3">
+          <div key={index} className="border rounded-lg p-4 space-y-3 hover:border-primary transition-colors">
             <CaptionOption
               index={index}
               caption={caption}
