@@ -1,11 +1,14 @@
 import React from 'react';
 import { Button } from '../../ui/button';
-import { useWizard } from '../WizardContext';
-
-type Tone = 'Professional' | 'Casual' | 'Humorous' | 'Persuasive' | 'Inspirational';
+import { usePost } from '../../post/PostContext';
+import { Tone } from '@/types/post';
 
 export const ToneStep = () => {
-  const { tone, setTone } = useWizard();
+  const { tone, setTone } = usePost();
+
+  const handleToneSelect = (selectedTone: Tone) => {
+    setTone(selectedTone);
+  };
 
   return (
     <div className="space-y-6">
@@ -21,7 +24,7 @@ export const ToneStep = () => {
             key={t}
             variant={tone === t ? "default" : "outline"}
             className="h-12"
-            onClick={() => setTone(t)}
+            onClick={() => handleToneSelect(t)}
           >
             {t}
           </Button>

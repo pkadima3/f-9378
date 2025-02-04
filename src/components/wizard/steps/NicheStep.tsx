@@ -1,9 +1,13 @@
 import React from 'react';
 import { Input } from '../../ui/input';
-import { useWizard } from '../WizardContext';
+import { usePost } from '../../post/PostContext';
 
 export const NicheStep = () => {
-  const { niche, setNiche } = useWizard();
+  const { niche, setNiche } = usePost();
+
+  const handleNicheChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNiche(e.target.value);
+  };
 
   return (
     <div className="space-y-6">
@@ -16,7 +20,7 @@ export const NicheStep = () => {
       <Input
         placeholder="e.g., Fitness, Fashion, Technology"
         value={niche}
-        onChange={(e) => setNiche(e.target.value)}
+        onChange={handleNicheChange}
         className="h-12"
       />
     </div>

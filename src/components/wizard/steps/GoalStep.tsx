@@ -1,11 +1,14 @@
 import React from 'react';
 import { Button } from '../../ui/button';
-import { useWizard } from '../WizardContext';
-
-type Goal = 'Sales' | 'Drive Engagement' | 'Grow Followers' | 'Share Knowledge' | 'Brand Awareness';
+import { usePost } from '../../post/PostContext';
+import { Goal } from '@/types/post';
 
 export const GoalStep = () => {
-  const { goal, setGoal } = useWizard();
+  const { goal, setGoal } = usePost();
+
+  const handleGoalSelect = (selectedGoal: Goal) => {
+    setGoal(selectedGoal);
+  };
 
   return (
     <div className="space-y-6">
@@ -21,7 +24,7 @@ export const GoalStep = () => {
             key={g}
             variant={goal === g ? "default" : "outline"}
             className="h-12"
-            onClick={() => setGoal(g)}
+            onClick={() => handleGoalSelect(g)}
           >
             {g}
           </Button>
