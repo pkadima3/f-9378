@@ -35,7 +35,10 @@ export const CaptionOption = ({
 
   return (
     <div className="space-y-2">
-      <RadioGroup value={isSelected ? caption : undefined} onValueChange={() => onSelect()}>
+      <RadioGroup 
+        value={caption} 
+        onValueChange={() => onSelect()}
+      >
         <div className="flex items-start space-x-2">
           <RadioGroupItem 
             value={caption} 
