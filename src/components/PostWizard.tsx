@@ -1,3 +1,4 @@
+
 import React, { useRef } from 'react';
 import { Card } from './ui/card';
 import { PostSteps } from './post/PostSteps';
@@ -58,7 +59,7 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
       
       if (step === 5 && platform && niche && goal && tone) {
         setIsGeneratingCaptions(true);
-        await generateCaptions({
+        const generatedCaptions = await generateCaptions({
           imageUrl: preview,
           fileType: fileType,
           platform,
@@ -66,6 +67,9 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
           goal,
           tone
         });
+        if (generatedCaptions) {
+          onComplete(generatedCaptions);
+        }
         setStep(6);
         return;
       }

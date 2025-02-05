@@ -1,10 +1,11 @@
+
 import { usePost } from './PostContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { Platform } from '@/types/post';
 
 interface PostManagerProps {
-  onComplete: () => void;
+  onComplete: (captions: string[]) => void;
 }
 
 interface ImageMetadata {
@@ -54,10 +55,7 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
       setCaptions(data.captions);
       setSelectedCaption(data.captions[0]);
       
-      toast({
-        title: "Captions Generated",
-        description: "Your captions have been generated successfully.",
-      });
+      return data.captions;
     } catch (error) {
       console.error('Caption generation error:', error);
       toast({
@@ -70,16 +68,11 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
   };
 
   const handleComplete = async () => {
-    if (!postId || !selectedCaption) {
-      toast({
-        title: "Error",
-        description: "Missing required information to complete the post",
-        variant: "destructive",
-      });
-      return;
-    }
-    
     try {
+      if (!postId || !selectedCaption) {
+        throw new Error("Missing required information to complete the post");
+      }
+
       const { error } = await supabase
         .from('posts')
         .update({
@@ -93,12 +86,12 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
 
       if (error) throw error;
 
+      onComplete([selectedCaption]); // Pass the selected caption back to the callback
+      
       toast({
         title: "Post Created",
         description: "Your post has been created successfully.",
       });
-      
-      onComplete();
     } catch (error) {
       console.error('Error saving post:', error);
       toast({
