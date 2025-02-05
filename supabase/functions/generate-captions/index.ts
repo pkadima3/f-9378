@@ -1,3 +1,4 @@
+
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
@@ -36,7 +37,7 @@ Requirements:
 6. Make it suitable for ${platform}'s audience
 7. Target the ${niche} niche specifically
 
-Please provide 3 different captions, each with a unique angle or approach. Format each caption with a title followed by the content.`;
+Please provide 3 different captions, each with a unique angle or approach.`;
 
     console.log('Sending request to OpenAI with prompt:', prompt);
 
@@ -47,7 +48,7 @@ Please provide 3 different captions, each with a unique angle or approach. Forma
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4',
+        model: 'gpt-4o-mini',
         messages: [
           { role: 'system', content: 'You are a professional social media content creator.' },
           { role: 'user', content: prompt }
@@ -65,11 +66,15 @@ Please provide 3 different captions, each with a unique angle or approach. Forma
       throw new Error('Failed to generate captions');
     }
 
-    const captions = result.choices[0].message.content
+    // Split the response into individual captions and clean them up
+    const generatedContent = result.choices[0].message.content;
+    console.log('Raw generated content:', generatedContent);
+
+    const captions = generatedContent
       .split('\n\n')
       .filter(caption => caption.trim().length > 0);
 
-    console.log('Generated captions:', captions);
+    console.log('Processed captions:', captions);
 
     return new Response(
       JSON.stringify({ captions }),

@@ -41,6 +41,8 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
         body: { platform, niche, goal, tone, imageMetadata },
       });
 
+      console.log('Supabase function response:', data, error);
+
       if (error) {
         console.error('Supabase function error:', error);
         throw error;
@@ -52,7 +54,12 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
       }
 
       console.log('Generated captions:', data.captions);
-      setCaptions(data.captions);
+      
+      // Ensure we're setting an array of captions
+      const processedCaptions = data.captions.map(caption => caption.trim());
+      console.log('Setting captions:', processedCaptions);
+      
+      setCaptions(processedCaptions);
       
       toast({
         title: "Captions Generated",
