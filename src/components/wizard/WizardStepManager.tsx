@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { UploadStep } from './steps/UploadStep';
 import { PlatformStep } from './steps/PlatformStep';
@@ -5,7 +6,6 @@ import { NicheStep } from './steps/NicheStep';
 import { GoalStep } from './steps/GoalStep';
 import { ToneStep } from './steps/ToneStep';
 import { CaptionsStep } from './steps/CaptionsStep';
-import { usePost } from '../post/PostContext';
 
 interface WizardStepManagerProps {
   step: number;
@@ -18,6 +18,9 @@ export const WizardStepManager: React.FC<WizardStepManagerProps> = ({
   isGeneratingCaptions,
   onUpload
 }) => {
+  console.log('WizardStepManager - Current step:', step);
+  console.log('WizardStepManager - Is generating captions:', isGeneratingCaptions);
+
   switch (step) {
     case 1:
       return <UploadStep onUpload={onUpload} />;

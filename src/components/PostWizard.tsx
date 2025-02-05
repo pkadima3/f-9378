@@ -1,3 +1,4 @@
+
 import React, { useRef } from 'react';
 import { Card } from './ui/card';
 import { PostSteps } from './post/PostSteps';
@@ -10,9 +11,15 @@ import { toast } from './ui/use-toast';
 
 interface PostWizardProps {
   onComplete: () => void;
+  isGenerating: boolean;
+  setIsGenerating: (isGenerating: boolean) => void;
 }
 
-export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
+export const PostWizard: React.FC<PostWizardProps> = ({ 
+  onComplete, 
+  isGenerating, 
+  setIsGenerating 
+}) => {
   const {
     step,
     setStep,
@@ -28,13 +35,9 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
     setFile,
     setPreview,
     setFileType,
-    captions,
-    setCaptions,
-    setSelectedCaption
   } = usePost();
 
   const imageRef = useRef<HTMLImageElement>(null);
-  const [isGeneratingCaptions, setIsGeneratingCaptions] = React.useState(false);
   const [isUploading, setIsUploading] = React.useState(false);
   const { uploadMedia } = PostUploader();
   const { generateCaptions, handleComplete } = PostManager({ onComplete });
@@ -57,7 +60,7 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
       }
       
       if (step === 5 && platform && niche && goal && tone) {
-        setIsGeneratingCaptions(true);
+        setIsGenerating(true);
         await generateCaptions({
           imageUrl: preview,
           fileType: fileType,
@@ -83,12 +86,12 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
       });
     } finally {
       setIsUploading(false);
-      setIsGeneratingCaptions(false);
+      setIsGenerating(false);
     }
   };
 
   const isNextDisabled = () => {
-    if (isUploading || isGeneratingCaptions) return true;
+    if (isUploading || isGenerating) return true;
     
     switch (step) {
       case 1:
@@ -127,11 +130,11 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
           onNext={handleNext}
           onComplete={handleComplete}
           isNextDisabled={isNextDisabled()}
-          isLoading={isUploading || isGeneratingCaptions}
+          isLoading={isUploading || isGenerating}
         >
           <WizardStepManager
             step={step}
-            isGeneratingCaptions={isGeneratingCaptions}
+            isGeneratingCaptions={isGenerating}
             onUpload={handleFileUpload}
           />
         </PostSteps>

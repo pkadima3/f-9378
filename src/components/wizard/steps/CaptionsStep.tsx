@@ -18,6 +18,10 @@ export const CaptionsStep: React.FC<CaptionsStepProps> = ({ isGeneratingCaptions
     setOverlayEnabled
   } = useWizard();
 
+  console.log('CaptionsStep - Current captions:', captions);
+  console.log('CaptionsStep - Is generating:', isGeneratingCaptions);
+  console.log('CaptionsStep - Selected caption:', selectedCaption);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2 mb-6">
@@ -32,8 +36,12 @@ export const CaptionsStep: React.FC<CaptionsStepProps> = ({ isGeneratingCaptions
       />
       <CaptionEditor
         captions={captions}
-        onSelect={setSelectedCaption}
+        onSelect={(caption) => {
+          console.log('Selecting caption:', caption);
+          setSelectedCaption(caption);
+        }}
         onEdit={(index, newCaption) => {
+          console.log('Editing caption at index:', index, 'New caption:', newCaption);
           const newCaptions = [...captions];
           newCaptions[index] = newCaption;
           setCaptions(newCaptions);
