@@ -1,10 +1,10 @@
-
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
+const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
@@ -14,37 +14,55 @@ serve(async (req) => {
   }
 
   try {
-    const apiKey = Deno.env.get('OPENAI_API_KEY');
-    if (!apiKey) {
-      throw new Error('OpenAI API key not found');
+    if (!openAIApiKey) {
+      throw new Error('OpenAI API key is not configured');
     }
 
-    const { platform, niche, goal, tone } = await req.json();
-    console.log('Received request with:', { platform, niche, goal, tone });
+    const { platform, niche, goal, tone, imageMetadata } = await req.json();
+    console.log('Received request with:', { platform, niche, goal, tone, imageMetadata });
 
-    const prompt = `
-Role: You are the world's top content creator and digital marketing expert with over 20 years of hands-on experience.
+    if (!platform || !niche || !goal || !tone) {
+      throw new Error('Missing required fields');
+    }
 
-Task: Create engaging social media captions for ${platform} that will resonate with the ${niche} niche.
-The goal is to ${goal} with a ${tone} tone.
+    const prompt = `You are the world's leading content creator and digital marketing expert with 20 years of hands-on experience. Create 3 detailed and creative social media post captions for the ${niche} industry, designed to achieve the goal of ${goal} in a ${tone} tone, taking into consideration the following image context: ${JSON.stringify(imageMetadata)}.
 
-Requirements:
-1. Each caption should start with a title in this format: **Title Here**
-2. Each caption should be unique and engaging
-3. Include relevant hashtags where appropriate
-4. Keep the tone ${tone} throughout
-5. Focus on ${goal} as the main objective
-6. Make it suitable for ${platform}'s audience
-7. Target the ${niche} niche specifically
+The captions must:
+1. Ensure captions are concise and meet ${platform}'s character limits
+2. Incorporate hashtags that are highly relevant to the ${niche} industry
+3. Include an effective call-to-action to inspire engagement
+4. Reflect current trends, use platform-specific language, and include emojis where appropriate
 
-Please provide 3 different captions, each with a unique angle or approach.`;
+Format each caption exactly like this (with no variations):
 
-    console.log('Sending request to OpenAI with prompt:', prompt);
+[b]Title 1[/b]
+[Caption text 1]
+[Hashtags 1]
+[Call to action 1]
+
+[b]Title 2[/b]
+[Caption text 2]
+[Hashtags 2]
+[Call to action 2]
+
+[b]Title 3[/b]
+[Caption text 3]
+[Hashtags 3]
+[Call to action 3]
+
+Important:
+- Each caption must start with a title in bold (using ** **)
+- Keep captions practical and innovative
+- Ensure all captions reflect best practices for ${platform}
+- Do not use separators like "---" between captions
+- Do not number the captions`;
+
+    console.log('Sending prompt to OpenAI:', prompt);
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
+        'Authorization': `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -58,38 +76,33 @@ Please provide 3 different captions, each with a unique angle or approach.`;
       }),
     });
 
-    const result = await response.json();
-    console.log('OpenAI response received:', result);
-
-    if (!result.choices || !result.choices[0]?.message?.content) {
-      console.error('Invalid response from OpenAI:', result);
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('OpenAI API error:', errorData);
       throw new Error('Failed to generate captions');
     }
 
-    // Split the response into individual captions and clean them up
-    const generatedContent = result.choices[0].message.content;
-    console.log('Raw generated content:', generatedContent);
+    const data = await response.json();
+    console.log('OpenAI response:', data);
 
-    const captions = generatedContent
-      .split('\n\n')
-      .filter(caption => caption.trim().length > 0);
+    const generatedText = data.choices[0].message.content;
+    
+    // Split by double newline and filter empty captions
+    const captions = generatedText
+      .split(/\n\n(?=\*\*)/g)
+      .map(caption => caption.trim())
+      .filter(caption => caption && caption !== '---');
 
-    console.log('Processed captions:', captions);
+    console.log('Generated captions:', captions);
 
-    return new Response(
-      JSON.stringify({ captions }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      },
-    );
+    return new Response(JSON.stringify({ captions }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   } catch (error) {
     console.error('Error in generate-captions function:', error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      },
-    );
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 });

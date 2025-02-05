@@ -28,19 +28,20 @@ export const CaptionOption = ({ index, caption, onEdit }: CaptionOptionProps) =>
     <div className="space-y-2">
       <div className="flex items-start space-x-2">
         <RadioGroupItem value={caption} id={`caption-${index}`} />
-        <Label htmlFor={`caption-${index}`} className="font-medium text-primary">
-          {title || `Caption Option ${index + 1}`}
+        <Label htmlFor={`caption-${index}`} className="font-medium">
+          Option {index + 1}
         </Label>
-      </div>
-      <div className="mt-2 text-sm">
-        <CaptionContent content={content} />
       </div>
       <Textarea
         value={caption}
         onChange={(e) => onEdit(e.target.value)}
-        className="min-h-[100px] w-full mt-2"
+        className="min-h-[100px] w-full"
         placeholder="Edit this caption..."
       />
+      <div className="mt-2 text-sm">
+        {title && <CaptionTitle title={title} />}
+        <CaptionContent content={content} />
+      </div>
     </div>
   );
 };

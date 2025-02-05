@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '../ui/card';
 import { ShareOptions } from '../share/ShareOptions';
-import { Platform } from '@/types/post';
+import { Platform } from '../PostWizard';
 import { MediaHandler } from '../media/MediaHandler';
 
 interface PostPreviewProps {

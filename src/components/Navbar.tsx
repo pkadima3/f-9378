@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { Button } from "./ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
@@ -10,25 +10,31 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "./ui/sheet"
-import {
   User,
   LogOut,
   Settings,
   CreditCard,
   LayoutDashboard,
-  Menu,
 } from "lucide-react"
 import { supabase } from "@/integrations/supabase/client"
 
-const TopBar = () => {
+const Navbar = () => {
   const [session, setSession] = useState<any>(null)
   const navigate = useNavigate()
+  
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -36,48 +42,14 @@ const TopBar = () => {
   }
 
   return (
-    <header className="fixed top-0 w-full border-b bg-background z-50">
+    <nav className="fixed top-0 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50 border-b shadow-sm">
       <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Toggle menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left">
-              <SheetHeader>
-                <SheetTitle>Menu</SheetTitle>
-              </SheetHeader>
-              <nav className="flex flex-col space-y-4 mt-4">
-                <Link to="/" className="text-sm font-medium">
-                  Home
-                </Link>
-                <Link to="/pricing" className="text-sm font-medium">
-                  Pricing
-                </Link>
-                <Link to="/features" className="text-sm font-medium">
-                  Features
-                </Link>
-                <Link to="/blog" className="text-sm font-medium">
-                  Blog
-                </Link>
-              </nav>
-            </SheetContent>
-          </Sheet>
+        <Link to="/" className="flex items-center space-x-2">
+          <img src="/lovable-uploads/416dbec0-a453-405d-9d5d-b4f9a4c84bbf.png" alt="Logo" className="h-8" />
+          <span className="font-bold text-xl">EngagePerfect</span>
+        </Link>
 
-          <Link to="/" className="flex items-center space-x-3">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17.3333 4L20.4267 10.4548L27.3133 11.4151L22.3233 16.3096L23.52 23.1581L17.3333 19.9333L11.1467 23.1581L12.3433 16.3096L7.35333 11.4151L14.24 10.4548L17.3333 4Z" fill="#4461F2"/>
-              <path d="M8 4L9.55467 7.17037L13 7.64706L10.5 10.0797L11.1093 13.5096L8 11.8889L4.89067 13.5096L5.5 10.0797L3 7.64706L6.44533 7.17037L8 4Z" fill="#4461F2"/>
-              <path d="M24 20L25.5547 23.1704L29 23.6471L26.5 26.0797L27.1093 29.5096L24 27.8889L20.8907 29.5096L21.5 26.0797L19 23.6471L22.4453 23.1704L24 20Z" fill="#4461F2"/>
-            </svg>
-            <span className="font-semibold text-xl">EngagePerfect AI</span>
-          </Link>
-        </div>
-
-        <nav className="hidden md:flex items-center space-x-6">
+        <div className="hidden md:flex items-center space-x-6">
           <Link to="/" className="text-sm font-medium transition-colors hover:text-primary">
             Home
           </Link>
@@ -93,7 +65,7 @@ const TopBar = () => {
           <Link to="/blog" className="text-sm font-medium transition-colors hover:text-primary">
             Blog
           </Link>
-        </nav>
+        </div>
 
         <div className="flex items-center space-x-4">
           {session ? (
@@ -140,18 +112,18 @@ const TopBar = () => {
             </DropdownMenu>
           ) : (
             <>
-              <Button variant="ghost" asChild>
-                <Link to="/auth">Login</Link>
+              <Button variant="outline" asChild>
+              <Link to="/auth?mode=signin">Login</Link>
               </Button>
-              <Button className="bg-[#4461F2] hover:bg-[#4461F2]/90" asChild>
-                <Link to="/auth">Sign up</Link>
+              <Button asChild>
+              <Link to="/auth?mode=signup">Sign up</Link>
               </Button>
             </>
           )}
         </div>
       </div>
-    </header>
+    </nav>
   )
 }
 
-export default TopBar
+export default Navbar
