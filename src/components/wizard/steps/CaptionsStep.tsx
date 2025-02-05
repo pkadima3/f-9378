@@ -1,6 +1,8 @@
+
 import React from 'react';
-import { CaptionEditor } from '../../CaptionEditor';
-import { CaptionSettings } from '../../post/CaptionSettings';
+import { Card } from '@/components/ui/card';
+import { CaptionCard } from '@/components/caption/CaptionCard';
+import { CaptionSettings } from '@/components/post/CaptionSettings';
 import { useWizard } from '../WizardContext';
 
 interface CaptionsStepProps {
@@ -29,17 +31,38 @@ export const CaptionsStep: React.FC<CaptionsStepProps> = ({ isGeneratingCaptions
         overlayEnabled={overlayEnabled}
         onOverlayChange={setOverlayEnabled}
       />
-      <CaptionEditor
-        captions={captions}
-        onSelect={setSelectedCaption}
-        onEdit={(index, newCaption) => {
-          const newCaptions = [...captions];
-          newCaptions[index] = newCaption;
-          setCaptions(newCaptions);
-        }}
-        selectedCaption={selectedCaption}
-        isLoading={isGeneratingCaptions}
-      />
+      <div className="space-y-4">
+        {/* If no captions have been generated, show the placeholder */}
+        {captions.length === 0 && (
+          <Card className="p-6 text-center">
+            <p className="text-muted-foreground">
+              No captions generated yet. Please complete the previous steps.
+            </p>
+          </Card>
+        )}
+
+        {/* When captions are generated, show them */}
+        {captions.length > 0 && (
+          <div className="space-y-4">
+            {captions.map((caption, index) => (
+              <CaptionCard
+                key={index}
+                caption={caption}
+                index={index}
+                onEdit={(index, newCaption) => {
+                  const newCaptions = [...captions];
+                  newCaptions[index] = newCaption;
+                  setCaptions(newCaptions);
+                }}
+                onSelect={(caption) => {
+                  setSelectedCaption(caption);
+                }}
+                isSelected={selectedCaption === caption}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
