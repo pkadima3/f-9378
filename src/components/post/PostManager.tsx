@@ -26,7 +26,6 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
     tone,
     selectedCaption,
     setCaptions,
-    setSelectedCaption,
   } = usePost();
 
   const generateCaptions = async (imageMetadata: ImageMetadata) => {
@@ -36,9 +35,10 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
 
     try {
       console.log('Generating captions with metadata:', imageMetadata);
+      console.log('Request parameters:', { platform, niche, goal, tone });
       
       const { data, error } = await supabase.functions.invoke('generate-captions', {
-        body: { platform, niche, goal, tone, imageMetadata },
+        body: { platform, niche, goal, tone },
       });
 
       console.log('Supabase function response:', data, error);
@@ -57,7 +57,7 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
       
       // Ensure we're setting an array of captions
       const processedCaptions = data.captions.map(caption => caption.trim());
-      console.log('Setting captions:', processedCaptions);
+      console.log('Setting processed captions:', processedCaptions);
       
       setCaptions(processedCaptions);
       
