@@ -18,14 +18,9 @@ const CaptionGenerator = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">AI Caption Generator</h1>
-      <div className="flex flex-col gap-6">
-        <WizardProvider>
-          <PostProvider>
-            <PostWizard onComplete={handleComplete} />
-          </PostProvider>
-        </WizardProvider>
-
+      <h1 className="text-3xl font-bold mb-4">AI Caption Generator</h1>
+      
+      <div className="space-y-6">
         <div className="space-y-4">
           {generatedCaptions.map((caption, index) => (
             <CaptionCard
@@ -49,6 +44,12 @@ const CaptionGenerator = () => {
             </p>
           )}
         </div>
+
+        <WizardProvider>
+          <PostProvider>
+            <PostWizard onComplete={handleComplete} />
+          </PostProvider>
+        </WizardProvider>
       </div>
     </div>
   );
