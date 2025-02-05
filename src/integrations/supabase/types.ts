@@ -12,230 +12,38 @@ export type Database = {
       posts: {
         Row: {
           created_at: string
-          goal: string | null
-          hashtags: string[] | null
+          goal: string
           id: string
-          image_url: string | null
-          niche: string | null
+          image_url: string
+          niche: string
           platform: string
           selected_caption: string | null
-          tone: string | null
+          tone: string
           user_id: string
         }
         Insert: {
           created_at?: string
-          goal?: string | null
-          hashtags?: string[] | null
+          goal: string
           id?: string
-          image_url?: string | null
-          niche?: string | null
+          image_url: string
+          niche: string
           platform: string
           selected_caption?: string | null
-          tone?: string | null
+          tone: string
           user_id: string
         }
         Update: {
           created_at?: string
-          goal?: string | null
-          hashtags?: string[] | null
+          goal?: string
           id?: string
-          image_url?: string | null
-          niche?: string | null
+          image_url?: string
+          niche?: string
           platform?: string
           selected_caption?: string | null
-          tone?: string | null
+          tone?: string
           user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "posts_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      profiles: {
-        Row: {
-          created_at: string
-          current_plan_id: string | null
-          email: string | null
-          full_name: string | null
-          id: string
-          requests_remaining: number | null
-          stripe_customer_id: string | null
-          subscription_status: string | null
-          total_requests_made: number | null
-          trial_active: boolean | null
-          trial_end_date: string | null
-          trial_requests_remaining: number | null
-          trial_start_date: string | null
-        }
-        Insert: {
-          created_at?: string
-          current_plan_id?: string | null
-          email?: string | null
-          full_name?: string | null
-          id: string
-          requests_remaining?: number | null
-          stripe_customer_id?: string | null
-          subscription_status?: string | null
-          total_requests_made?: number | null
-          trial_active?: boolean | null
-          trial_end_date?: string | null
-          trial_requests_remaining?: number | null
-          trial_start_date?: string | null
-        }
-        Update: {
-          created_at?: string
-          current_plan_id?: string | null
-          email?: string | null
-          full_name?: string | null
-          id?: string
-          requests_remaining?: number | null
-          stripe_customer_id?: string | null
-          subscription_status?: string | null
-          total_requests_made?: number | null
-          trial_active?: boolean | null
-          trial_end_date?: string | null
-          trial_requests_remaining?: number | null
-          trial_start_date?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_current_plan_id_fkey"
-            columns: ["current_plan_id"]
-            isOneToOne: false
-            referencedRelation: "subscription_plans"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      subscription_plans: {
-        Row: {
-          created_at: string
-          currency: string
-          features: Json | null
-          id: string
-          name: string
-          price: number
-          request_limit: number
-          stripe_price_id: string
-        }
-        Insert: {
-          created_at?: string
-          currency?: string
-          features?: Json | null
-          id?: string
-          name: string
-          price: number
-          request_limit: number
-          stripe_price_id: string
-        }
-        Update: {
-          created_at?: string
-          currency?: string
-          features?: Json | null
-          id?: string
-          name?: string
-          price?: number
-          request_limit?: number
-          stripe_price_id?: string
         }
         Relationships: []
-      }
-      subscriptions: {
-        Row: {
-          billing_cycle_end_date: string | null
-          created_at: string
-          id: string
-          next_billing_date: string | null
-          plan_name: string
-          start_date: string | null
-          status: string
-          stripe_subscription_id: string
-          trial_end_date: string | null
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          billing_cycle_end_date?: string | null
-          created_at?: string
-          id?: string
-          next_billing_date?: string | null
-          plan_name: string
-          start_date?: string | null
-          status: string
-          stripe_subscription_id: string
-          trial_end_date?: string | null
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          billing_cycle_end_date?: string | null
-          created_at?: string
-          id?: string
-          next_billing_date?: string | null
-          plan_name?: string
-          start_date?: string | null
-          status?: string
-          stripe_subscription_id?: string
-          trial_end_date?: string | null
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "subscriptions_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      usage_logs: {
-        Row: {
-          id: string
-          request_type: string
-          status: string
-          subscription_id: string | null
-          timestamp: string
-          user_id: string
-        }
-        Insert: {
-          id?: string
-          request_type: string
-          status: string
-          subscription_id?: string | null
-          timestamp?: string
-          user_id: string
-        }
-        Update: {
-          id?: string
-          request_type?: string
-          status?: string
-          subscription_id?: string | null
-          timestamp?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "usage_logs_subscription_id_fkey"
-            columns: ["subscription_id"]
-            isOneToOne: false
-            referencedRelation: "subscriptions"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "usage_logs_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
       }
     }
     Views: {
