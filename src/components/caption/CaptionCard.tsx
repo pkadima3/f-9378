@@ -1,8 +1,6 @@
 
 import React from 'react';
-import { Share2, Copy } from 'lucide-react';
-import { Button } from '../ui/button';
-import { CaptionOption } from './CaptionOption';
+import { Copy, Share2 } from 'lucide-react';
 import { toast } from '../ui/use-toast';
 
 interface CaptionCardProps {
@@ -29,32 +27,27 @@ export const CaptionCard = ({
   };
 
   return (
-    <div className={`border rounded-lg p-4 space-y-3 transition-colors ${isSelected ? 'border-primary' : 'hover:border-primary'}`}>
-      <CaptionOption
-        index={index}
-        caption={caption}
-        onEdit={(newCaption) => onEdit(index, newCaption)}
-        onSelect={() => onSelect(caption)}
-        isSelected={isSelected}
-      />
+    <div className={`border rounded-lg p-4 mb-4 ${isSelected ? 'border-primary' : 'border-gray-200'}`}>
+      <div 
+        className="cursor-pointer"
+        onClick={() => onSelect(caption)}
+      >
+        <p className="text-sm text-gray-900 mb-2">{caption}</p>
+      </div>
       <div className="flex justify-end gap-2 mt-2">
-        <Button
-          variant="outline"
-          size="sm"
+        <button
           onClick={handleCopy}
-          className="flex items-center gap-2"
+          className="flex items-center gap-1 text-xs text-gray-600 hover:text-gray-900"
         >
-          <Copy className="h-4 w-4" />
+          <Copy className="h-3 w-3" />
           Copy
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          className="flex items-center gap-2"
+        </button>
+        <button
+          className="flex items-center gap-1 text-xs text-gray-600 hover:text-gray-900"
         >
-          <Share2 className="h-4 w-4" />
+          <Share2 className="h-3 w-3" />
           Share
-        </Button>
+        </button>
       </div>
     </div>
   );

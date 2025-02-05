@@ -1,7 +1,9 @@
+
 import React from 'react';
 import { CaptionEditor } from '../../CaptionEditor';
 import { CaptionSettings } from '../../post/CaptionSettings';
 import { useWizard } from '../WizardContext';
+import { Card } from '../../ui/card';
 
 interface CaptionsStepProps {
   isGeneratingCaptions: boolean;
@@ -25,21 +27,39 @@ export const CaptionsStep: React.FC<CaptionsStepProps> = ({ isGeneratingCaptions
         </div>
         <h2 className="text-xl font-semibold">Generated Captions</h2>
       </div>
+
       <CaptionSettings
         overlayEnabled={overlayEnabled}
         onOverlayChange={setOverlayEnabled}
       />
-      <CaptionEditor
-        captions={captions}
-        onSelect={setSelectedCaption}
-        onEdit={(index, newCaption) => {
-          const newCaptions = [...captions];
-          newCaptions[index] = newCaption;
-          setCaptions(newCaptions);
-        }}
-        selectedCaption={selectedCaption}
-        isLoading={isGeneratingCaptions}
-      />
+
+      <Card className="p-6">
+        <h3 className="text-lg font-semibold mb-4">Generated Captions</h3>
+        <div className="space-y-4">
+          {isGeneratingCaptions ? (
+            <p className="text-center text-muted-foreground">Generating captions...</p>
+          ) : captions.length === 0 ? (
+            <p className="text-center text-muted-foreground">
+              No captions generated yet. Please complete the previous steps.
+            </p>
+          ) : (
+            captions.map((caption, index) => (
+              <CaptionCard
+                key={index}
+                caption={caption}
+                index={index}
+                onEdit={(index, newCaption) => {
+                  const newCaptions = [...captions];
+                  newCaptions[index] = newCaption;
+                  setCaptions(newCaptions);
+                }}
+                onSelect={() => setSelectedCaption(caption)}
+                isSelected={selectedCaption === caption}
+              />
+            ))
+          )}
+        </div>
+      </Card>
     </div>
   );
 };
