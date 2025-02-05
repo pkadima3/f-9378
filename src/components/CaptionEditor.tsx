@@ -30,13 +30,13 @@ export const CaptionEditor = ({
     });
   };
 
-  // Create an array that includes the selected caption if it exists and isn't in captions
+  // Create an array that includes both generated captions and the selected caption
   const displayCaptions = React.useMemo(() => {
-    if (captions.length > 0) return captions;
-    if (selectedCaption && !captions.includes(selectedCaption)) {
-      return [selectedCaption];
+    const allCaptions = new Set([...captions]);
+    if (selectedCaption) {
+      allCaptions.add(selectedCaption);
     }
-    return [];
+    return Array.from(allCaptions);
   }, [captions, selectedCaption]);
 
   if (isLoading) {
