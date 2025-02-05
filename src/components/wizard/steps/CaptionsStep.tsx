@@ -4,6 +4,7 @@ import { CaptionEditor } from '../../CaptionEditor';
 import { CaptionSettings } from '../../post/CaptionSettings';
 import { useWizard } from '../WizardContext';
 import { Card } from '../../ui/card';
+import { CaptionCard } from '../../caption/CaptionCard';
 
 interface CaptionsStepProps {
   isGeneratingCaptions: boolean;
