@@ -1,3 +1,4 @@
+
 // This is the main part of our app that creates and shows caption cards
 import React, { useState } from 'react';
 
@@ -20,11 +21,6 @@ const CaptionGenerator = () => {
   const handleComplete = (captions: string[]) => {
     // Put all the new captions in our first storage box
     setGeneratedCaptions(captions);
-    
-    // If we have at least one caption, automatically select the first one
-    if (captions.length > 0) {
-      setSelectedCaption(captions[0]);
-    }
   };
 
   // This is what our page will actually look like
@@ -33,54 +29,62 @@ const CaptionGenerator = () => {
       {/* The big title at the top */}
       <h1 className="text-3xl font-bold mb-4">AI Caption Generator</h1>
      
-      {/* This is our wizard form where we create captions */}
-      <div className="space-y-6">
-        <WizardProvider>
-          <PostProvider>
-            <PostWizard 
-              onComplete={handleComplete} 
-            />
-          </PostProvider>
-        </WizardProvider>
-
-         {/* Caption Generation Section */}
-      <div className="space-y-4 mb-6">
-        {/* If no captions have been generated, show the placeholder */}
-        {generatedCaptions.length === 0 && (
-          <Card className="p-6 text-center">
-            <p className="text-muted-foreground">
-              No captions generated yet. Please complete the previous steps.
-            </p>
-          </Card>
-        )}
-
-        {/* When captions are generated, show them */}
-        {generatedCaptions.length > 0 && (
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Generated Captions</h3>
-            {generatedCaptions.map((caption, index) => (
-              <CaptionCard
-                key={index}
-                caption={caption}
-                index={index}
-                onEdit={(index, newCaption) => {
-                  const newCaptions = [...generatedCaptions];
-                  newCaptions[index] = newCaption;
-                  setGeneratedCaptions(newCaptions);
-                }}
-                onSelect={(caption) => {
-                  setSelectedCaption(caption);
-                }}
-                isSelected={selectedCaption === caption}
+      {/* This is our container for the side-by-side layout */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Left column for captions */}
+        <div className="space-y-6">
+          {/* This is our wizard form where we create captions */}
+          <WizardProvider>
+            <PostProvider>
+              <PostWizard 
+                onComplete={handleComplete} 
               />
-            ))}
-          </Card>
-        )}
-      </div>
+            </PostProvider>
+          </WizardProvider>
 
+          {/* Caption Generation Section */}
+          <div className="space-y-4 mb-6">
+            {/* If no captions have been generated, show the placeholder */}
+            {generatedCaptions.length === 0 && (
+              <Card className="p-6 text-center">
+                <p className="text-muted-foreground">
+                  No captions generated yet. Please complete the previous steps.
+                </p>
+              </Card>
+            )}
+
+            {/* When captions are generated, show them */}
+            {generatedCaptions.length > 0 && (
+              <Card className="p-6">
+                <h3 className="text-lg font-semibold mb-4">Generated Captions</h3>
+                <div className="space-y-4">
+                  {generatedCaptions.map((caption, index) => (
+                    <CaptionCard
+                      key={index}
+                      caption={caption}
+                      index={index}
+                      onEdit={(index, newCaption) => {
+                        const newCaptions = [...generatedCaptions];
+                        newCaptions[index] = newCaption;
+                        setGeneratedCaptions(newCaptions);
+                      }}
+                      onSelect={(caption) => {
+                        setSelectedCaption(caption);
+                      }}
+                      isSelected={selectedCaption === caption}
+                    />
+                  ))}
+                </div>
+              </Card>
+            )}
+          </div>
+        </div>
+
+        {/* Right column for preview */}
+        <div className="sticky top-6">
+          {/* The preview will be rendered here by PostWizard */}
+        </div>
       </div>
-       
-     
     </div>
   );
 };
