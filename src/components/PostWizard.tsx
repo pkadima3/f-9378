@@ -188,18 +188,26 @@ export const PostWizard = ({ onComplete }: PostWizardProps) => {
         .from('media')
         .getPublicUrl(filePath);
 
+      // Update the insert operation to include all required fields
       const { data: post, error: dbError } = await supabase
         .from('posts')
         .insert({
           image_url: publicUrl,
-          platform: platform || 'default',
-          user_id: user.id
+          platform: platform || 'Instagram', // Default platform
+          user_id: user.id,
+          goal: 'Brand Awareness', // Default goal
+          niche: 'General', // Default niche
+          tone: 'Professional', // Default tone
         })
         .select()
         .single();
 
-      if (dbError) throw dbError;
+      if (dbError) {
+        console.error('Database error:', dbError);
+        throw dbError;
+      }
 
+      console.log('Created post:', post);
       setPostId(post.id);
       setStep(2);
       toast({
