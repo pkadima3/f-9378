@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card } from './ui/card';
 import { RadioGroup } from './ui/radio-group';
@@ -30,15 +31,6 @@ export const CaptionEditor = ({
     });
   };
 
-  // Create an array that includes the selected caption if it exists and isn't in captions
-  const displayCaptions = React.useMemo(() => {
-    if (captions.length > 0) return captions;
-    if (selectedCaption && !captions.includes(selectedCaption)) {
-      return [selectedCaption];
-    }
-    return [];
-  }, [captions, selectedCaption]);
-
   if (isLoading) {
     return (
       <Card className="p-6 animate-fade-in">
@@ -51,25 +43,18 @@ export const CaptionEditor = ({
     );
   }
 
-  if (!displayCaptions.length) {
-    return (
-      <Card className="p-6">
-        <p className="text-center text-muted-foreground">
-          No captions generated yet. Please complete the previous steps.
-        </p>
-      </Card>
-    );
+  if (!captions.length) {
+    return null;
   }
 
   return (
     <Card className="p-6">
-      <h3 className="text-lg font-semibold mb-4">Generated Captions</h3>
       <RadioGroup
         value={selectedCaption}
         onValueChange={onSelect}
         className="space-y-6"
       >
-        {displayCaptions.map((caption, index) => (
+        {captions.map((caption, index) => (
           <div key={index} className="border rounded-lg p-4 space-y-3 hover:border-primary transition-colors">
             <CaptionOption
               index={index}

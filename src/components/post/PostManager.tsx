@@ -1,3 +1,4 @@
+
 import { usePost } from './PostContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
@@ -52,7 +53,6 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
 
       console.log('Generated captions:', data.captions);
       setCaptions(data.captions);
-      setSelectedCaption(data.captions[0]);
       
       toast({
         title: "Captions Generated",
@@ -73,7 +73,7 @@ export const PostManager = ({ onComplete }: PostManagerProps) => {
     if (!postId || !selectedCaption) {
       toast({
         title: "Error",
-        description: "Missing required information to complete the post",
+        description: "Please select a caption before completing",
         variant: "destructive",
       });
       return;
