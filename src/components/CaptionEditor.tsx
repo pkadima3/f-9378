@@ -30,6 +30,15 @@ export const CaptionEditor = ({
     });
   };
 
+  // Create an array that includes the selected caption if it exists and isn't in captions
+  const displayCaptions = React.useMemo(() => {
+    if (captions.length > 0) return captions;
+    if (selectedCaption && !captions.includes(selectedCaption)) {
+      return [selectedCaption];
+    }
+    return [];
+  }, [captions, selectedCaption]);
+
   if (isLoading) {
     return (
       <Card className="p-6 animate-fade-in">
@@ -42,7 +51,7 @@ export const CaptionEditor = ({
     );
   }
 
-  if (!captions.length) {
+  if (!displayCaptions.length) {
     return (
       <Card className="p-6">
         <p className="text-center text-muted-foreground">
@@ -60,7 +69,7 @@ export const CaptionEditor = ({
         onValueChange={onSelect}
         className="space-y-6"
       >
-        {captions.map((caption, index) => (
+        {displayCaptions.map((caption, index) => (
           <div key={index} className="border rounded-lg p-4 space-y-3 hover:border-primary transition-colors">
             <CaptionOption
               index={index}
