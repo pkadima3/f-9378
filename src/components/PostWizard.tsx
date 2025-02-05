@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { Card } from './ui/card';
 import { PostSteps } from './post/PostSteps';
@@ -10,7 +9,7 @@ import { WizardStepManager } from './wizard/WizardStepManager';
 import { toast } from './ui/use-toast';
 
 interface PostWizardProps {
-  onComplete: (captions: string[]) => void;
+  onComplete: () => void;
 }
 
 export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
@@ -38,7 +37,7 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
   const [isGeneratingCaptions, setIsGeneratingCaptions] = React.useState(false);
   const [isUploading, setIsUploading] = React.useState(false);
   const { uploadMedia } = PostUploader();
-  const { generateCaptions, handleComplete: handlePostManagerComplete } = PostManager({ onComplete });
+  const { generateCaptions, handleComplete } = PostManager({ onComplete });
 
   const handleBack = () => {
     setStep(Math.max(1, step - 1));
@@ -59,7 +58,7 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
       
       if (step === 5 && platform && niche && goal && tone) {
         setIsGeneratingCaptions(true);
-        const generatedCaptions = await generateCaptions({
+        await generateCaptions({
           imageUrl: preview,
           fileType: fileType,
           platform,
@@ -67,9 +66,6 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
           goal,
           tone
         });
-        if (generatedCaptions) {
-          onComplete(generatedCaptions);
-        }
         setStep(6);
         return;
       }
@@ -120,25 +116,6 @@ export const PostWizard: React.FC<PostWizardProps> = ({ onComplete }) => {
       setFileType(file.type);
     };
     reader.readAsDataURL(file);
-  };
-
-  const handleComplete = async () => {
-    try {
-      if (captions.length > 0) {
-        onComplete(captions);
-        toast({
-          title: "Success",
-          description: "Captions have been generated successfully!",
-        });
-      }
-    } catch (error) {
-      console.error('Error completing wizard:', error);
-      toast({
-        title: "Error",
-        description: "Failed to complete the wizard",
-        variant: "destructive",
-      });
-    }
   };
 
   return (

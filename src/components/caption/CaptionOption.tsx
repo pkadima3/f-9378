@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { RadioGroupItem } from '../ui/radio-group';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 import { CaptionTitle } from './CaptionTitle';
@@ -10,17 +9,9 @@ interface CaptionOptionProps {
   index: number;
   caption: string;
   onEdit: (newCaption: string) => void;
-  onSelect: () => void;
-  isSelected: boolean;
 }
 
-export const CaptionOption = ({ 
-  index, 
-  caption, 
-  onEdit,
-  onSelect,
-  isSelected 
-}: CaptionOptionProps) => {
+export const CaptionOption = ({ index, caption, onEdit }: CaptionOptionProps) => {
   const formatCaption = (caption: string) => {
     const titleMatch = caption.match(/\*\*(.*?)\*\*/);
     if (titleMatch) {
@@ -35,23 +26,12 @@ export const CaptionOption = ({
 
   return (
     <div className="space-y-2">
-      <RadioGroup 
-        value={caption} 
-        onValueChange={() => onSelect()}
-      >
-        <div className="flex items-start space-x-2">
-          <RadioGroupItem 
-            value={caption} 
-            id={`caption-${index}`}
-          />
-          <Label 
-            htmlFor={`caption-${index}`} 
-            className="font-medium text-primary"
-          >
-            {title || `Caption Option ${index + 1}`}
-          </Label>
-        </div>
-      </RadioGroup>
+      <div className="flex items-start space-x-2">
+        <RadioGroupItem value={caption} id={`caption-${index}`} />
+        <Label htmlFor={`caption-${index}`} className="font-medium text-primary">
+          {title || `Caption Option ${index + 1}`}
+        </Label>
+      </div>
       <div className="mt-2 text-sm">
         <CaptionContent content={content} />
       </div>
