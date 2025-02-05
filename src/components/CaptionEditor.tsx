@@ -43,8 +43,14 @@ export const CaptionEditor = ({
     );
   }
 
-  if (!captions.length) {
-    return null;
+  if (!captions || captions.length === 0) {
+    return (
+      <Card className="p-6">
+        <p className="text-center text-muted-foreground">
+          No captions generated yet. Please complete the previous steps.
+        </p>
+      </Card>
+    );
   }
 
   return (

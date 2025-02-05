@@ -18,22 +18,6 @@ export const CaptionsStep: React.FC<CaptionsStepProps> = ({ isGeneratingCaptions
     setOverlayEnabled
   } = useWizard();
 
-  if (!captions.length && !isGeneratingCaptions) {
-    return (
-      <div className="space-y-6">
-        <div className="flex items-center gap-2 mb-6">
-          <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm">
-            6
-          </div>
-          <h2 className="text-xl font-semibold">Generated Captions</h2>
-        </div>
-        <div className="p-6 text-center text-muted-foreground border rounded-lg">
-          No captions generated yet. Please complete the previous steps.
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2 mb-6">
