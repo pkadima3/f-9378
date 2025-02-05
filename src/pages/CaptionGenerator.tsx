@@ -32,7 +32,18 @@ const CaptionGenerator = () => {
     <div className="container mx-auto px-4 py-8">
       {/* The big title at the top */}
       <h1 className="text-3xl font-bold mb-4">AI Caption Generator</h1>
-      
+     
+      {/* This is our wizard form where we create captions */}
+      <div className="space-y-6">
+        <WizardProvider>
+          <PostProvider>
+            <PostWizard 
+              onComplete={handleComplete} 
+            />
+          </PostProvider>
+        </WizardProvider>
+      </div>
+       
       {/* Caption Generation Section */}
       <div className="space-y-4 mb-6">
         {/* If no captions have been generated, show the placeholder */}
@@ -68,16 +79,6 @@ const CaptionGenerator = () => {
         )}
       </div>
 
-      {/* This is our wizard form where we create captions */}
-      <div className="space-y-6">
-        <WizardProvider>
-          <PostProvider>
-            <PostWizard 
-              onComplete={handleComplete} 
-            />
-          </PostProvider>
-        </WizardProvider>
-      </div>
     </div>
   );
 };
