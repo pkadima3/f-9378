@@ -42,9 +42,8 @@ const CaptionGenerator = () => {
             />
           </PostProvider>
         </WizardProvider>
-      </div>
-       
-      {/* Caption Generation Section */}
+
+         {/* Caption Generation Section */}
       <div className="space-y-4 mb-6">
         {/* If no captions have been generated, show the placeholder */}
         {generatedCaptions.length === 0 && (
@@ -79,6 +78,9 @@ const CaptionGenerator = () => {
         )}
       </div>
 
+      </div>
+       
+     
     </div>
   );
 };
