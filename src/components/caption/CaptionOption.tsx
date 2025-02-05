@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { RadioGroupItem } from '../ui/radio-group';
 import { Label } from '../ui/label';
@@ -9,9 +10,17 @@ interface CaptionOptionProps {
   index: number;
   caption: string;
   onEdit: (newCaption: string) => void;
+  onSelect: () => void;
+  isSelected: boolean;
 }
 
-export const CaptionOption = ({ index, caption, onEdit }: CaptionOptionProps) => {
+export const CaptionOption = ({ 
+  index, 
+  caption, 
+  onEdit,
+  onSelect,
+  isSelected 
+}: CaptionOptionProps) => {
   const formatCaption = (caption: string) => {
     const titleMatch = caption.match(/\*\*(.*?)\*\*/);
     if (titleMatch) {
@@ -27,8 +36,16 @@ export const CaptionOption = ({ index, caption, onEdit }: CaptionOptionProps) =>
   return (
     <div className="space-y-2">
       <div className="flex items-start space-x-2">
-        <RadioGroupItem value={caption} id={`caption-${index}`} />
-        <Label htmlFor={`caption-${index}`} className="font-medium text-primary">
+        <RadioGroupItem 
+          value={caption} 
+          id={`caption-${index}`}
+          checked={isSelected}
+          onClick={onSelect}
+        />
+        <Label 
+          htmlFor={`caption-${index}`} 
+          className="font-medium text-primary"
+        >
           {title || `Caption Option ${index + 1}`}
         </Label>
       </div>
